@@ -99,7 +99,7 @@ static int musl_select (int n, fd_set * restrict rfds, fd_set * restrict wfds, f
 #endif
 }
 
-int select (int n, fd_set * restrict rfds, fd_set * restrict wfds, fd_set * restrict efds, struct timeval* restrict tv) {
+visible int select (int n, fd_set * restrict rfds, fd_set * restrict wfds, fd_set * restrict efds, struct timeval* restrict tv) {
     if (!rfds && !wfds && !efds) {
         return musl_select (n, rfds, wfds, efds, tv);
     } else {
@@ -108,7 +108,7 @@ int select (int n, fd_set * restrict rfds, fd_set * restrict wfds, fd_set * rest
 
 }
 
-int pselect (int n, fd_set * restrict rfds, fd_set * restrict wfds, fd_set * restrict efds, const struct timespec* restrict ts, const sigset_t * restrict mask) {
+visible int pselect (int n, fd_set * restrict rfds, fd_set * restrict wfds, fd_set * restrict efds, const struct timespec* restrict ts, const sigset_t * restrict mask) {
     if (!rfds && !wfds && !efds) {
         return musl_select (n, rfds, wfds, efds, ts);
     } else {

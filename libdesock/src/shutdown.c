@@ -6,7 +6,7 @@
 #include <desock.h>
 #include <syscall.h>
 
-int shutdown (int fd, int how) {
+visible int shutdown (int fd, int how) {
     if (VALID_FD (fd) && fd_table[fd].desock) {
         DEBUG_LOG ("[%d] desock::shutdown(%d, %d) = 0\n", gettid (), fd, how);
         return 0;

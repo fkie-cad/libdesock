@@ -10,20 +10,20 @@
 #include <syscall.h>
 
 #ifdef DEBUG
-int epoll_create (int size) {
+visible int epoll_create (int size) {
     int r = __syscall_ret (__syscall (SYS_epoll_create1, 0));
     DEBUG_LOG ("[%d] desock::epoll_create(%d) = %d\n", gettid (), size, r);
     return r;
 }
 
-int epoll_create1 (int flags) {
+visible int epoll_create1 (int flags) {
     int r = __syscall_ret (__syscall (SYS_epoll_create1, flags));
     DEBUG_LOG ("[%d] desock::epoll_create1(%d) = %d\n", gettid (), flags, r);
     return r;
 }
 #endif
 
-int epoll_ctl (int fd, int op, int fd2, struct epoll_event* ev) {
+visible int epoll_ctl (int fd, int op, int fd2, struct epoll_event* ev) {
     if (VALID_FD (fd2)) {
         DEBUG_LOG ("[%d] desock::epoll_ctl(%d, %d, %d, %p)", gettid (), fd, op, fd2, ev);
 
@@ -99,7 +99,7 @@ static int internal_epoll_wait (int fd, struct epoll_event* ev, int cnt) {
     return j;
 }
 
-int epoll_pwait (int fd, struct epoll_event* ev, int cnt, int to, const sigset_t * sigs) {
+visible int epoll_pwait (int fd, struct epoll_event* ev, int cnt, int to, const sigset_t * sigs) {
     DEBUG_LOG ("[%d] desock::epoll_pwait(%d, %p, %d, %d, %p)", gettid (), fd, ev, cnt, to, sigs);
 
     int ret = internal_epoll_wait (fd, ev, cnt);
@@ -113,7 +113,7 @@ int epoll_pwait (int fd, struct epoll_event* ev, int cnt, int to, const sigset_t
     }
 }
 
-int epoll_wait (int fd, struct epoll_event* ev, int cnt, int to) {
+visible int epoll_wait (int fd, struct epoll_event* ev, int cnt, int to) {
     DEBUG_LOG ("[%d] desock::epoll_wait(%d, %p, %d, %d)", gettid (), fd, ev, cnt, to);
 
     int ret = internal_epoll_wait (fd, ev, cnt);
@@ -127,7 +127,7 @@ int epoll_wait (int fd, struct epoll_event* ev, int cnt, int to) {
     }
 }
 
-int epoll_pwait2 (int epfd, struct epoll_event* events, int maxevents, struct timespec* timeout, const sigset_t * sigmask) {
+visible int epoll_pwait2 (int epfd, struct epoll_event* events, int maxevents, const struct timespec* timeout, const sigset_t * sigmask) {
     DEBUG_LOG ("[%d] desock::epoll_pwait2(%d, %p, %d, %p, %p)", gettid (), epfd, events, maxevents, timeout, sigmask);
 
     int ret = internal_epoll_wait (epfd, events, maxevents);

@@ -8,7 +8,7 @@
 #include <syscall.h>
 #include <desock.h>
 
-int socket (int domain, int type, int protocol) {
+visible int socket (int domain, int type, int protocol) {
     DEBUG_LOG ("[%d] desock::socket(%d, %d, %d)", gettid (), domain, type, protocol);
 
     int s = __socketcall (socket, domain, type, protocol, 0, 0, 0);

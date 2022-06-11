@@ -49,7 +49,7 @@ static int internal_poll (struct pollfd* fds, nfds_t n) {
     return ret;
 }
 
-int poll (struct pollfd* fds, nfds_t n, int timeout) {
+visible int poll (struct pollfd* fds, nfds_t n, int timeout) {
     int r = internal_poll (fds, n);
 
     if (r == 0) {
@@ -59,7 +59,7 @@ int poll (struct pollfd* fds, nfds_t n, int timeout) {
     }
 }
 
-int ppoll (struct pollfd* fds, nfds_t n, const struct timespec* to, const sigset_t * mask) {
+visible int ppoll (struct pollfd* fds, nfds_t n, const struct timespec* to, const sigset_t * mask) {
     int r = internal_poll (fds, n);
 
     if (r == 0) {

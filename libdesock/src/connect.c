@@ -6,7 +6,7 @@
 #include <syscall.h>
 #include <desock.h>
 
-int connect (int fd, const struct sockaddr* addr, socklen_t len) {
+visible int connect (int fd, const struct sockaddr* addr, socklen_t len) {
     if (VALID_FD (fd) && DESOCK_FD (fd)) {
         DEBUG_LOG ("[%d] desock::connect(%d, %p, %d)\n", gettid (), fd, addr, len);
         fd_table[fd].desock = 1;

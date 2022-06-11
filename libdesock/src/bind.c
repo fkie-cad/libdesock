@@ -7,7 +7,7 @@
 #include <syscall.h>
 #include <desock.h>
 
-int bind (int fd, const struct sockaddr* addr, socklen_t len) {
+visible int bind (int fd, const struct sockaddr* addr, socklen_t len) {
     if (VALID_FD (fd) && DESOCK_FD (fd)) {
         DEBUG_LOG ("[%d] desock::bind(%d, %p, %d) = 0\n", gettid (), fd, addr, len);
         fd_table[fd].desock = 1;

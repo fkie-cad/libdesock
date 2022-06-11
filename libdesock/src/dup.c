@@ -5,7 +5,7 @@
 #include <desock.h>
 #include <syscall.h>
 
-int dup (int fd) {
+visible int dup (int fd) {
     int ret = syscall (SYS_dup, fd);
 
     if (ret > -1 && VALID_FD (ret) && VALID_FD (fd)) {
@@ -28,7 +28,7 @@ int dup (int fd) {
     return ret;
 }
 
-int dup2 (int old, int new) {
+visible int dup2 (int old, int new) {
     int r = new;
 
     /* Don't allow overwriting of stdin/stdout */
@@ -56,7 +56,7 @@ int dup2 (int old, int new) {
     return __syscall_ret (r);
 }
 
-int dup3 (int old, int new, int flags) {
+visible int dup3 (int old, int new, int flags) {
     int r = new;
 
     /* Don't allow overwriting of stdin/stdout */

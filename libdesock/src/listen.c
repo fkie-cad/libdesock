@@ -5,7 +5,7 @@
 #include <syscall.h>
 #include <desock.h>
 
-int listen (int fd, int backlog) {
+visible int listen (int fd, int backlog) {
     if (VALID_FD (fd) && fd_table[fd].desock) {
         DEBUG_LOG ("[%d] desock::listen(%d, %d) = 0\n", gettid (), fd, backlog);
         fd_table[fd].listening = 1;

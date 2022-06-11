@@ -6,7 +6,7 @@
 #include <syscall.h>
 #include <desock.h>
 
-int close (int fd) {
+visible int close (int fd) {
     int r = 0;
 
     if (VALID_FD (fd)) {

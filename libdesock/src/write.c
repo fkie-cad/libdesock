@@ -32,7 +32,7 @@ static long internal_writev (const struct iovec* iov, int len) {
     return written;
 }
 
-ssize_t write (int fd, const void* buf, size_t count) {
+visible ssize_t write (int fd, const void* buf, size_t count) {
     if (VALID_FD (fd) && fd_table[fd].desock) {
 #ifdef DEBUG
         int r = syscall_cp (SYS_write, 1, buf, count);
@@ -46,7 +46,7 @@ ssize_t write (int fd, const void* buf, size_t count) {
     }
 }
 
-ssize_t send (int fd, const void* buf, size_t len, int flags) {
+visible ssize_t send (int fd, const void* buf, size_t len, int flags) {
     if (VALID_FD (fd) && fd_table[fd].desock) {
 #ifdef DEBUG
         int r = syscall_cp (SYS_write, 1, buf, len);
@@ -60,7 +60,7 @@ ssize_t send (int fd, const void* buf, size_t len, int flags) {
     }
 }
 
-ssize_t sendto (int fd, const void* buf, size_t len, int flags, const struct sockaddr* addr, socklen_t alen) {
+visible ssize_t sendto (int fd, const void* buf, size_t len, int flags, const struct sockaddr* addr, socklen_t alen) {
     if (VALID_FD (fd) && fd_table[fd].desock) {
 #ifdef DEBUG
         int r = syscall_cp (SYS_write, 1, buf, len);
@@ -74,7 +74,7 @@ ssize_t sendto (int fd, const void* buf, size_t len, int flags, const struct soc
     }
 }
 
-ssize_t sendmsg (int fd, const struct msghdr* msg, int flags) {
+visible ssize_t sendmsg (int fd, const struct msghdr* msg, int flags) {
     if (VALID_FD (fd) && fd_table[fd].desock) {
         int r = internal_writev (msg->msg_iov, msg->msg_iovlen);
         DEBUG_LOG ("[%d] desock::sendmsg(%d, %p, %d) = %d\n", gettid (), fd, msg, flags, r);
@@ -84,7 +84,7 @@ ssize_t sendmsg (int fd, const struct msghdr* msg, int flags) {
     }
 }
 
-int sendmmsg (int fd, struct mmsghdr* msgvec, unsigned int vlen, int flags) {
+visible int sendmmsg (int fd, struct mmsghdr* msgvec, unsigned int vlen, int flags) {
     if (VALID_FD (fd) && fd_table[fd].desock) {
         DEBUG_LOG ("[%d] desock::sendmmsg(%d, %p, %d, %d)", gettid (), fd, msgvec, vlen, flags);
 
@@ -107,7 +107,7 @@ int sendmmsg (int fd, struct mmsghdr* msgvec, unsigned int vlen, int flags) {
     }
 }
 
-ssize_t writev (int fd, const struct iovec* iov, int count) {
+visible ssize_t writev (int fd, const struct iovec* iov, int count) {
     if (VALID_FD (fd) && fd_table[fd].desock) {
         int r = internal_writev (iov, count);
         DEBUG_LOG ("[%d] desock::writev(%d, %p, %d) = %d\n", gettid (), fd, iov, count, r);

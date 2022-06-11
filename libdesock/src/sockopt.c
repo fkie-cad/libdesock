@@ -6,7 +6,7 @@
 #include <desock.h>
 #include <syscall.h>
 
-int setsockopt (int fd, int level, int optname, const void* optval, socklen_t optlen) {
+visible int setsockopt (int fd, int level, int optname, const void* optval, socklen_t optlen) {
     if (VALID_FD (fd) && fd_table[fd].desock) {
         DEBUG_LOG ("[%d] desock::setsockopt(%d, %d, %d, %p, %lu) = 0\n", gettid (), fd, level, optname, optval, optlen);
         return 0;

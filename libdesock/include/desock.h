@@ -77,4 +77,6 @@ inline void clear_fd_table_entry (int idx) {
 
 #define MIN(x, y) ((x) < (y) ? (x) : (y))
 
+#define visible __attribute__ ((visibility ("default")))
+
 #endif /* DESOCK_H */

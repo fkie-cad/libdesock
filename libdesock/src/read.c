@@ -52,7 +52,7 @@ static long internal_readv (struct iovec* iov, int len, int* full, int peek, int
     return read_in;
 }
 
-ssize_t read (int fd, void* buf, size_t count) {
+visible ssize_t read (int fd, void* buf, size_t count) {
     if (VALID_FD (fd) && fd_table[fd].desock) {
         DEBUG_LOG ("[%d] desock::read(%d, %p, %lu)", gettid (), fd, buf, count);
 
@@ -107,7 +107,7 @@ static ssize_t internal_recv (int fd, char* buf, size_t len, int flags) {
     return offset;
 }
 
-ssize_t recvfrom (int fd, void* buf, size_t len, int flags, struct sockaddr* restrict addr, socklen_t * alen) {
+visible ssize_t recvfrom (int fd, void* buf, size_t len, int flags, struct sockaddr* restrict addr, socklen_t * alen) {
     if (VALID_FD (fd) && fd_table[fd].desock) {
         DEBUG_LOG ("[%d] desock::recvfrom(%d, %p, %lu, %d, %p, %p)", gettid (), fd, buf, len, flags, addr, alen);
 
@@ -121,7 +121,7 @@ ssize_t recvfrom (int fd, void* buf, size_t len, int flags, struct sockaddr* res
     }
 }
 
-ssize_t recv (int fd, void* buf, size_t len, int flags) {
+visible ssize_t recv (int fd, void* buf, size_t len, int flags) {
     if (VALID_FD (fd) && fd_table[fd].desock) {
         int r = internal_recv (fd, buf, len, flags);
         DEBUG_LOG ("[%d] desock::recv(%d, %p, %lu, %d) = %d\n", gettid (), fd, buf, len, flags, r);
@@ -131,7 +131,7 @@ ssize_t recv (int fd, void* buf, size_t len, int flags) {
     }
 }
 
-ssize_t recvmsg (int fd, struct msghdr* msg, int flags) {
+visible ssize_t recvmsg (int fd, struct msghdr* msg, int flags) {
     if (VALID_FD (fd) && fd_table[fd].desock) {
         DEBUG_LOG ("[%d] desock::recvmsg(%d, %p, %d)", gettid (), fd, msg, flags);
 
@@ -162,7 +162,7 @@ ssize_t recvmsg (int fd, struct msghdr* msg, int flags) {
     }
 }
 
-int recvmmsg (int fd, struct mmsghdr* msgvec, unsigned int vlen, int flags, struct timespec* timeout) {
+visible int recvmmsg (int fd, struct mmsghdr* msgvec, unsigned int vlen, int flags, struct timespec* timeout) {
     if (VALID_FD (fd) && fd_table[fd].desock) {
         DEBUG_LOG ("[%d] desock::recvmmsg(%d, %p, %d, %d, %p)", gettid (), fd, msgvec, vlen, flags, timeout);
 
@@ -215,7 +215,7 @@ int recvmmsg (int fd, struct mmsghdr* msgvec, unsigned int vlen, int flags, stru
     }
 }
 
-ssize_t readv (int fd, struct iovec* iov, int count) {
+visible ssize_t readv (int fd, struct iovec* iov, int count) {
     if (VALID_FD (fd) && fd_table[fd].desock) {
         int r = internal_readv (iov, count, NULL, 0, 0);
         DEBUG_LOG ("[%d] desock::readv(%d, %p, %d) = %d\n", gettid (), fd, iov, count, r);

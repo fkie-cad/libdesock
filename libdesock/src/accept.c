@@ -44,10 +44,10 @@ static int internal_accept (int fd, struct sockaddr* restrict addr, socklen_t * 
     }
 }
 
-int accept (int fd, struct sockaddr* restrict addr, socklen_t * restrict len) {
+visible int accept (int fd, struct sockaddr* restrict addr, socklen_t * restrict len) {
     return internal_accept (fd, addr, len, 0);
 }
 
-int accept4 (int fd, struct sockaddr* restrict addr, socklen_t * restrict len, int flg) {
+visible int accept4 (int fd, struct sockaddr* restrict addr, socklen_t * restrict len, int flg) {
     return internal_accept (fd, addr, len, flg);
 }

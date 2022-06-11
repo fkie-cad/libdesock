@@ -6,7 +6,7 @@
 #include <syscall.h>
 #include <musl-features.h>
 
-ssize_t sendfile (int out_fd, int in_fd, off_t * ofs, size_t count) {
+visible ssize_t sendfile (int out_fd, int in_fd, off_t * ofs, size_t count) {
     if (VALID_FD (out_fd) && fd_table[out_fd].desock) {
         DEBUG_LOG ("[%d] desock::sendfile(%d, %d, %p, %lu) = %lu\n", gettid (), out_fd, in_fd, ofs, count, count);
         return count;
@@ -15,4 +15,4 @@ ssize_t sendfile (int out_fd, int in_fd, off_t * ofs, size_t count) {
     }
 }
 
-strong_alias (sendfile, sendfile64);
+visible strong_alias (sendfile, sendfile64);
