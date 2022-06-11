@@ -1,13 +1,19 @@
 # De-socketing for Fuzzing
 
-When fuzzing network applications the fuzzers provide their input via stdin
-although the applications get their input over network connections.
+When fuzzing network applications the fuzzers provide their inputs over stdin
+although the applications expect their input over network connections.
 This library redirects all network communication to stdin and stdout such that 
 network applications can be traditionally fuzzed with AFL++.
+
+This has the advantage of
+1. Improving performance by reducing kernel interactions because libdesock operates 100% in user-space 
+2. Reducing the amount of manual effort necessary to create a harness
 
 For an in-depth explanation of de-socketing see our [blog post](https://lolcads.github.io/posts/2022/02/libdesock/).
 
 ## Building
+Libdesock uses `meson` and `ninja` as its build system.
+
 ```sh
 meson setup ./build
 cd ./build
@@ -53,6 +59,7 @@ AFL_PRELOAD=libdesock.so
 ```
 when using AFL++.
 
+## Examples
 If you are using libdesock and AFL for fuzzing, the programs under test
 usually require a special setup to work with AFL. Checkout our [examples](./examples) 
 directory for some examples on how to properly setup network applications for fuzzing.
@@ -61,6 +68,6 @@ directory for some examples on how to properly setup network applications for fu
 - TCP servers using [libuv](https://libuv.org/) cannot be de-socket-ed (yet). De-socketing of libuv currently only works with UDP servers. It only takes a small change to fix this though, if anyone needs this create an issue.
 - `ioctl()` is not supported. Make sure your target does not rely on `ioctl` requests
 
-## System Call Emulation
-
-System call emulation is partly done using musl libc code (https://musl.libc.org/) - see `libdesock/include`
+## Copyright Notice
+Libdesock is based upon [musl libc](https://musl.libc.org/) and parts of the musl source code
+can be found in libdesock.
