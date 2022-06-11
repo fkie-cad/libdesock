@@ -86,7 +86,7 @@ visible int dup3 (int old, int new, int flags) {
 
 #ifdef DEBUG
 
-int _debug_real_dup2 (int old, int new) {
+visible int _debug_real_dup2 (int old, int new) {
     int r;
     while ((r = __syscall (SYS_dup2, old, new)) == -EBUSY) ;
     return __syscall_ret (r);

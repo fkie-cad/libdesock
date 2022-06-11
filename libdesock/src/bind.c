@@ -18,7 +18,7 @@ visible int bind (int fd, const struct sockaddr* addr, socklen_t len) {
 }
 
 #ifdef DEBUG
-int _debug_real_bind (int fd, const struct sockaddr* addr, socklen_t len) {
+visible int _debug_real_bind (int fd, const struct sockaddr* addr, socklen_t len) {
     return socketcall (bind, fd, addr, len, 0, 0, 0);
 }
 #endif

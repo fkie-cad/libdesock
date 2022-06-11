@@ -110,13 +110,13 @@ void desock_main (void) {
 }
 
 #ifdef DEBUG
-void clear_fd_table_entry (int idx) {
+visible void clear_fd_table_entry (int idx) {
     fd_table[idx].epfd = -1;
     fd_table[idx].desock = 0;
     fd_table[idx].listening = 0;
 }
 
-int _debug_instant_fd (int listening) {
+visible int _debug_instant_fd (int listening) {
     int fd = syscall (SYS_dup, 0);
 
     if (fd < 0 || !VALID_FD (fd)) {
@@ -128,7 +128,7 @@ int _debug_instant_fd (int listening) {
     return fd;
 }
 
-void _debug_get_fd_table_entry (int idx, struct fd_entry* dst) {
+visible void _debug_get_fd_table_entry (int idx, struct fd_entry* dst) {
     memcpy (dst, &fd_table[idx], sizeof (struct fd_entry));
 }
 #endif
