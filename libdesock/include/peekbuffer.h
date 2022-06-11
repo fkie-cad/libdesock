@@ -1,7 +1,7 @@
 #ifndef PEEKBUFFER_H
 #define PEEKBUFFER_H
 
-#define STATIC_BUFFER_SIZE 8192
+#define STATIC_BUFFER_SIZE 1048576
 
 typedef struct {
     char* buffer;
