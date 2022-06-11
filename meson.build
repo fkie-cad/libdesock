@@ -1,7 +1,7 @@
 project('libdesock', 'c', license: 'MIT', version: '1.1')
 
 if get_option('interpreter') == ''
-    r = run_command('sh', '-c', 'readelf -l /bin/ls | grep "program interpreter" | cut -d: -f2  | sed -e "s/^.//" -e "s/.$//"')
+    r = run_command('sh', '-c', 'readelf -l /bin/ls | grep "program interpreter" | cut -d: -f2  | sed -e "s/^.//" -e "s/.$//"', check: true)
     interpreter = r.stdout().strip()
 else
     interpreter = get_option('interpreter')
@@ -13,6 +13,7 @@ args = [
     '-Wextra',
     '-Wno-unused-parameter',
     '-Wno-sign-compare',
+    '-Wno-discarded-qualifiers',
     '-fvisibility=hidden',
     '-D DESOCKARCH="@0@"'.format(get_option('arch')),
     '-D MAX_CONNS=1',
@@ -53,13 +54,14 @@ sources = [
     'libdesock/src/sockopt.c',
     'libdesock/src/syscall.c',
     'libdesock/src/write.c',
+    'libdesock/src/hooks.c',
 ]
 include_directories = [
     include_directories('libdesock/include'),
     include_directories('libdesock/include/arch/' + get_option('arch'))
 ]
 
-libdesock_shared = shared_library('desock', 
+shared_library('desock', 
     sources : sources,
     include_directories : include_directories,
     c_args : args,

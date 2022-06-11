@@ -3,8 +3,8 @@
 #include <unistd.h>
 #include <sys/socket.h>
 
-#include <syscall.h>
-#include <desock.h>
+#include "syscall.h"
+#include "desock.h"
 
 visible int connect (int fd, const struct sockaddr* addr, socklen_t len) {
     if (VALID_FD (fd) && DESOCK_FD (fd)) {

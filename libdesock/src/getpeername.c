@@ -4,8 +4,8 @@
 #include <string.h>
 #include <unistd.h>
 
-#include <desock.h>
-#include <syscall.h>
+#include "desock.h"
+#include "syscall.h"
 
 visible int getpeername (int fd, struct sockaddr* restrict addr, socklen_t * restrict len) {
     if (VALID_FD (fd) && fd_table[fd].desock) {

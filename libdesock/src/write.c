@@ -4,18 +4,18 @@
 #include <errno.h>
 #include <sys/socket.h>
 
-#include <syscall.h>
-#include <desock.h>
+#include "syscall.h"
+#include "desock.h"
+#include "hooks.h"
 
 static long internal_writev (const struct iovec* iov, int len) {
     int written = 0;
 
     for (int i = 0; i < len; ++i) {
-#ifdef DEBUG
         int offset = 0, r;
 
         do {
-            r = syscall_cp (SYS_write, 1, (char *) iov[i].iov_base + offset, iov[i].iov_len - offset);
+            r = hook_output((char *) iov[i].iov_base + offset, iov[i].iov_len - offset);
 
             if (r == -1) {
                 return -1;
@@ -24,9 +24,6 @@ static long internal_writev (const struct iovec* iov, int len) {
             written += r;
             offset += r;
         } while (offset < iov[i].iov_len && r > 0);
-#else
-        written += iov[i].iov_len;
-#endif
     }
 
     return written;
@@ -34,13 +31,9 @@ static long internal_writev (const struct iovec* iov, int len) {
 
 visible ssize_t write (int fd, const void* buf, size_t count) {
     if (VALID_FD (fd) && fd_table[fd].desock) {
-#ifdef DEBUG
-        int r = syscall_cp (SYS_write, 1, buf, count);
+        int r = hook_output(buf, count);
         DEBUG_LOG ("[%d] desock::write(%d, %p, %lu) = %d\n", gettid (), fd, buf, count, r);
         return r;
-#else
-        return count;
-#endif
     } else {
         return syscall_cp (SYS_write, fd, buf, count);
     }
@@ -48,13 +41,9 @@ visible ssize_t write (int fd, const void* buf, size_t count) {
 
 visible ssize_t send (int fd, const void* buf, size_t len, int flags) {
     if (VALID_FD (fd) && fd_table[fd].desock) {
-#ifdef DEBUG
-        int r = syscall_cp (SYS_write, 1, buf, len);
+        int r = hook_output(buf, len);
         DEBUG_LOG ("[%d] desock::send(%d, %p, %lu, %d) = %d\n", gettid (), fd, buf, len, flags, r);
         return r;
-#else
-        return len;
-#endif
     } else {
         return sendto (fd, buf, len, flags, 0, 0);
     }
@@ -62,13 +51,9 @@ visible ssize_t send (int fd, const void* buf, size_t len, int flags) {
 
 visible ssize_t sendto (int fd, const void* buf, size_t len, int flags, const struct sockaddr* addr, socklen_t alen) {
     if (VALID_FD (fd) && fd_table[fd].desock) {
-#ifdef DEBUG
-        int r = syscall_cp (SYS_write, 1, buf, len);
+        int r = hook_output(buf, len);
         DEBUG_LOG ("[%d] desock::sendto(%d, %p, %lu, %d, %p, %lu) = %d\n", gettid (), fd, buf, len, flags, addr, alen, r);
         return r;
-#else
-        return len;
-#endif
     } else {
         return socketcall_cp (sendto, fd, buf, len, flags, addr, alen);
     }

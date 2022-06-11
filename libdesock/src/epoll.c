@@ -6,8 +6,8 @@
 #include <semaphore.h>
 #include <unistd.h>
 
-#include <desock.h>
-#include <syscall.h>
+#include "desock.h"
+#include "syscall.h"
 
 #ifdef DEBUG
 visible int epoll_create (int size) {

@@ -3,8 +3,8 @@
 #include <sys/socket.h>
 #include <unistd.h>
 
-#include <desock.h>
-#include <syscall.h>
+#include "desock.h"
+#include "syscall.h"
 
 visible int shutdown (int fd, int how) {
     if (VALID_FD (fd) && fd_table[fd].desock) {

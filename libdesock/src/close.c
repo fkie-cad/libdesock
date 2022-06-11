@@ -3,8 +3,8 @@
 #include <errno.h>
 #include <semaphore.h>
 
-#include <syscall.h>
-#include <desock.h>
+#include "syscall.h"
+#include "desock.h"
 
 visible int close (int fd) {
     int r = 0;

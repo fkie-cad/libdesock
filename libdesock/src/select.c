@@ -6,8 +6,8 @@
 #include <string.h>
 #include <unistd.h>
 
-#include <desock.h>
-#include <syscall.h>
+#include "desock.h"
+#include "syscall.h"
 
 static int internal_select (int n, fd_set * rfds, fd_set * wfds, fd_set * efds) {
     DEBUG_LOG ("[%d] desock::internal_select(%d, %p, %p, %p)", gettid (), n, rfds, wfds, efds);

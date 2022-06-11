@@ -2,9 +2,9 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-#include <desock.h>
-#include <syscall.h>
-#include <musl-features.h>
+#include "desock.h"
+#include "syscall.h"
+#include "musl-features.h"
 
 visible ssize_t sendfile (int out_fd, int in_fd, off_t * ofs, size_t count) {
     if (VALID_FD (out_fd) && fd_table[out_fd].desock) {

@@ -5,8 +5,8 @@
 #include <unistd.h>
 #include <string.h>
 
-#include <syscall.h>
-#include <desock.h>
+#include "syscall.h"
+#include "desock.h"
 
 visible int socket (int domain, int type, int protocol) {
     DEBUG_LOG ("[%d] desock::socket(%d, %d, %d)", gettid (), domain, type, protocol);

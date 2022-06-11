@@ -3,8 +3,8 @@
 #include <string.h>
 #include <unistd.h>
 
-#include <desock.h>
-#include <syscall.h>
+#include "desock.h"
+#include "syscall.h"
 
 visible int setsockopt (int fd, int level, int optname, const void* optval, socklen_t optlen) {
     if (VALID_FD (fd) && fd_table[fd].desock) {

@@ -9,8 +9,8 @@
 #include <netinet/in.h>
 #include <sys/un.h>
 
-#include <syscall.h>
-#include <desock.h>
+#include "syscall.h"
+#include "desock.h"
 
 const struct sockaddr_in stub_sockaddr_in = {
     .sin_family = AF_INET,
@@ -26,6 +26,9 @@ const struct sockaddr_in6 stub_sockaddr_in6 = {
     .sin6_scope_id = 0
 };
 
+/* Given an fd that is being desocketed fill the given sockaddress structure
+   with the right sockaddr stub from above.
+ */
 void fill_sockaddr (int fd, struct sockaddr* addr, socklen_t * addr_len) {
     if (addr && addr_len) {
         switch (fd_table[fd].domain) {
@@ -71,9 +74,18 @@ void _error (char* fmt_string, ...) {
     abort ();
 }
 
+/* Highest file descriptor number seen so far */
 int max_fd = 0;
+
+/* Indicates whether the next call to accept() should block or not */
 int accept_block = 1;
+
+/* Table that holds metadata about desocketed file descriptors */
 struct fd_entry fd_table[FD_TABLE_SIZE];
+
+/* Semaphore for synchronization of the connection pool in multi-threaded
+   applications.
+ */
 sem_t sem;
 
 __attribute__ ((constructor))

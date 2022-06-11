@@ -6,9 +6,10 @@
 #include <string.h>
 #include <errno.h>
 
-#include <syscall.h>
-#include <desock.h>
-#include <peekbuffer.h>
+#include "syscall.h"
+#include "desock.h"
+#include "peekbuffer.h"
+#include "hooks.h"
 
 static long internal_readv (struct iovec* iov, int len, int* full, int peek, int offset) {
     int read_in = 0;
@@ -30,7 +31,7 @@ static long internal_readv (struct iovec* iov, int len, int* full, int peek, int
 
             if (r < iov[i].iov_len) {
                 errno = 0;
-                r += syscall_cp (SYS_read, 0, (char *) iov[i].iov_base + r, iov[i].iov_len - r);
+                r += hook_input((char *) iov[i].iov_base + r, iov[i].iov_len - r);
 
                 if (errno) {
                     return -1;
@@ -64,7 +65,7 @@ visible ssize_t read (int fd, void* buf, size_t count) {
 
         if (offset < count) {
             errno = 0;
-            offset += syscall_cp (SYS_read, 0, (char *) buf + offset, count - offset);
+            offset += hook_input((char *) buf + offset, count - offset);
 
             if (errno) {
                 DEBUG_LOG (" = -1\n");
@@ -97,7 +98,7 @@ static ssize_t internal_recv (int fd, char* buf, size_t len, int flags) {
 
     if (offset < len) {
         errno = 0;
-        offset += (syscall_cp (SYS_read, 0, buf + offset, len - offset));
+        offset += hook_input(buf + offset, len - offset);
 
         if (errno) {
             return -1;

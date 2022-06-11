@@ -4,8 +4,8 @@
 #include <signal.h>
 #include <unistd.h>
 
-#include <desock.h>
-#include <syscall.h>
+#include "desock.h"
+#include "syscall.h"
 
 static int internal_poll (struct pollfd* fds, nfds_t n) {
     DEBUG_LOG ("[%d] desock::internal_poll(%p, %d)", gettid (), fds, n);

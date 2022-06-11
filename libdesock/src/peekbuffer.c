@@ -4,9 +4,9 @@
 #include <errno.h>
 #include <unistd.h>
 
-#include <desock.h>
-#include <syscall.h>
-#include <peekbuffer.h>
+#include "desock.h"
+#include "syscall.h"
+#include "peekbuffer.h"
 
 char static_buffer[STATIC_BUFFER_SIZE];
 

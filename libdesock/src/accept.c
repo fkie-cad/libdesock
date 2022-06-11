@@ -7,8 +7,8 @@
 #include <string.h>
 #include <netinet/in.h>
 
-#include <syscall.h>
-#include <desock.h>
+#include "syscall.h"
+#include "desock.h"
 
 static int internal_accept (int fd, struct sockaddr* restrict addr, socklen_t * restrict len, int flag) {
     if (VALID_FD (fd) && fd_table[fd].desock) {

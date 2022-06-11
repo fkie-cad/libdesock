@@ -4,8 +4,8 @@
 #define _GNU_SOURCE
 #include <unistd.h>
 
-#include <syscall.h>
-#include <desock.h>
+#include "syscall.h"
+#include "desock.h"
 
 visible int bind (int fd, const struct sockaddr* addr, socklen_t len) {
     if (VALID_FD (fd) && DESOCK_FD (fd)) {

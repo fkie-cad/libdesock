@@ -2,8 +2,8 @@
 #include <unistd.h>
 #include <string.h>
 
-#include <desock.h>
-#include <syscall.h>
+#include "desock.h"
+#include "syscall.h"
 
 visible int dup (int fd) {
     int ret = syscall (SYS_dup, fd);
