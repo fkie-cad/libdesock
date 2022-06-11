@@ -7,6 +7,7 @@
 #include "desock.h"
 #include "syscall.h"
 #include "peekbuffer.h"
+#include "hooks.h"
 
 char static_buffer[STATIC_BUFFER_SIZE];
 
@@ -69,7 +70,7 @@ int peekbuffer_read (size_t len) {
         return -1;
     }
 
-    int ret = syscall_cp (SYS_read, 0, peekbuffer.buffer + peekbuffer.start + peekbuffer.size, len);
+    int ret = hook_input(peekbuffer.buffer + peekbuffer.start + peekbuffer.size, len);
 
     if (ret > 0) {
         peekbuffer.size += ret;
