@@ -3,6 +3,24 @@
 set -e;
 
 pytest="pytest -q -x -s"
+
+if [[ "$1" == "-multi" ]]; then 
+dir=$(mktemp -d)
+
+meson setup "$dir"
+
+pushd "$dir"
+meson configure -D debug_desock=true -D multiple_requests=true
+meson compile
+popd
+
+export LIBDESOCK=$(realpath "$dir/libdesock.so")
+
+$pytest tests/test_multi_read.py
+
+rm -rf "$dir"
+else
+
 dir=$(mktemp -d)
 
 meson setup "$dir"
@@ -37,3 +55,4 @@ echo
 echo '########################'
 ./get-coverage.py
 echo '########################'
+fi

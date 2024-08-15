@@ -14,6 +14,7 @@ git checkout release-1.21.4
 ```
 
 ### Patching the source
+## Single request fuzzing
 nginx runs in an endless loop but we want it to exit
 after processing one request. We locate the event loop
 in `src/os/unix/ngx_process_cycle.c:297` and replace
@@ -42,6 +43,18 @@ Then we add a deferred forkserver to AFL by inserting in `src/os/unix/ngx_proces
      for (i = 0; i < 2; ++i) {
          ngx_log_debug0(NGX_LOG_DEBUG_EVENT, cycle->log, 0, "worker cycle");
 ```
+
+## Multiple request fuzzing
+nginx runs in an endless loop but we want it to exit
+after processing all of the requests in our test file. The connection will be closed when `read` returns zero. We add the line in `src/http/ngx_http_request.c:3787` to indicate that nginx should cleanly exit upon the next iteration of the main processing loop. <mark> If patching for multiple requests do not make the patches for single requests</mark>
+```diff
+@@ -3785,6 +3785,7 @@ ngx_http_close_connection(ngx_connection_t *c)
+     ngx_close_connection(c);
+ 
+     ngx_destroy_pool(pool);
++    ngx_terminate=1;
+ }
+ ```
 
 ### Build configuration
 ```sh

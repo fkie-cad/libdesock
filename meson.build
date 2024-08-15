@@ -33,6 +33,14 @@ if get_option('desock_server')
     args += '-D DESOCK_BIND'
 endif
 
+if get_option('allow_dup_stdin')
+    args += '-D DUP_STDIN'
+endif
+
+if get_option('multiple_requests')
+    args += '-D MULTI_REQUEST'
+endif
+
 sources = [
     'libdesock/src/accept.c',
     'libdesock/src/bind.c',

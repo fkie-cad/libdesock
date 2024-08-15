@@ -1,8 +1,14 @@
+##############################################################################
+# Added StdinFile class   
+#    Kelly Patterson - Cisco Talos
+#         Copyright (C) 2024 Cisco Systems Inc
+##############################################################################
 import os
 import ctypes
 import socket
 import threading
 import random
+import tempfile
 
 import desock
 
@@ -40,6 +46,29 @@ class StdinPipe:
         os.dup2(self._stdin_backup, 0)
         os.close(self._stdin_backup)
         os.close(self._r_fd)
+
+class StdinFile:
+    def __init__(self):
+        self._stdin_backup = None
+        self.tmpFile = None
+        self.tmpFd = None
+
+    def __enter__(self):
+        self.tmpFile = tempfile.NamedTemporaryFile()
+        self._stdin_backup = os.dup(0)
+        self.tmpFd = os.open(self.tmpFile.name, os.O_RDWR)
+        os.dup2(self.tmpFd, 0)
+        return self
+
+    def write(self, data):
+        os.write(0, data)
+        os.lseek(0, 0, os.SEEK_SET)
+
+    def __exit__(self, *args):
+        os.dup2(self._stdin_backup, 0)
+        os.close(self._stdin_backup)
+        os.close(self.tmpFd)
+        self.tmpFile.close()
         
 class StdoutPipe:
     def __init__(self):
