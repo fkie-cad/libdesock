@@ -39,6 +39,7 @@ The following options are specific to libdesock:
 | `desock_server`  | If this is true, calls to `bind()` get hooked. This enables the desocketing of servers.    | true    |
 | `allow_dup_stdin`| If this is true, calls to `dup2()` are allowed for stdin. This enables stdin redirection when running under gdb    | false   |
 | `multiple_requests`| If this is true, a delimiter will be used to return different data from subsequent read calls.     | false   |
+| `request_delimiter` | The delimiter that separates multiple requests | `-=^..^=-` |
 | `fd_table_size`  | Only fds < `fd_table_size` can be desocked.                                                | 128     |
 | `interpreter`    | Path to ld.so (will be determined dynamically if not set)                                  |         |
 
