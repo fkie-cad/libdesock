@@ -98,25 +98,49 @@ void desock_init (void) {
 const char elf_interpreter[] __attribute__ ((section (".interp"))) = INTERPRETER;
 
 void desock_main (void) {
-    printf ("libdesock.so: A fast desocketing library built for fuzzing\n" "\n" "This library can desock\n" "    servers = "
+    printf (
+        "libdesock.so: A fast desocketing library built for fuzzing\n" "\n" "This library can desock\n"
+        "    servers = "
 #ifdef DESOCK_BIND
             "yes"
 #else
             "no"
 #endif
-            "\n" "    clients = "
+        "\n"
+        "    clients = "
 #ifdef DESOCK_CONNECT
             "yes"
 #else
             "no"
 #endif
-            "\n\n" "Compilation options:\n" "    - DEBUG = "
+        "\n\n"
+        "Compilation options:\n"
+        "    - DEBUG = "
 #ifdef DEBUG
             "yes"
 #else
             "no"
 #endif
-            "\n" "    - MAX_CONNS = %d\n" "    - FD_TABLE_SIZE = %d\n" "    - ARCH = %s\n" "\n" "Use this with LD_PRELOAD=libdesock.so on a network application\n" "or with AFL_PRELOAD=libdesock.so when fuzzing with AFL.\n", MAX_CONNS, FD_TABLE_SIZE, DESOCKARCH);
+        "\n"
+        "    - MAX_CONNS = %d\n"
+        "    - FD_TABLE_SIZE = %d\n"
+        "    - ARCH = %s\n"
+        "\n"
+        "Support for multiple requests: "
+#ifdef MULTI_REQUEST
+        "yes"
+#else
+        "no"
+#endif
+        "\n"
+#ifdef MULTI_REQUEST
+        "    delimiter = \"" REQUEST_DELIMITER "\"\n"
+#endif
+        "\n"
+        "Use this with LD_PRELOAD=libdesock.so on a network application\n"
+        "or with AFL_PRELOAD=libdesock.so when fuzzing with AFL.\n", 
+        MAX_CONNS, FD_TABLE_SIZE, DESOCKARCH
+    );
 
     exit (0);
 }
