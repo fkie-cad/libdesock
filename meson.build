@@ -11,6 +11,7 @@ args = [
     '-O2',
     '-Wall',
     '-Wextra',
+    '-Wpedantic',
     '-Wno-unused-parameter',
     '-Wno-sign-compare',
     '-Wno-discarded-qualifiers',
@@ -40,6 +41,8 @@ endif
 if get_option('multiple_requests')
     args += '-D MULTI_REQUEST'
 endif
+
+args += '-D REQUEST_DELIMITER="@0@"'.format(get_option('request_delimiter'))
 
 sources = [
     'libdesock/src/accept.c',

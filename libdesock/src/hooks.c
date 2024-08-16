@@ -14,6 +14,8 @@
  *
  */
 #ifdef MULTI_REQUEST
+#define _GNU_SOURCE
+#define __USE_GNU
 #include <limits.h>
 #include <unistd.h>
 #include <stdbool.h>
@@ -27,7 +29,7 @@
  
 
 #ifdef MULTI_REQUEST
-char* delimiter = "=^..^=";
+static const char* delimiter = REQUEST_DELIMITER;
 
 /* This function will "look ahead" into the file by reading the length of the remaining 
     bytes of the delimiter and check if those next bytes match the delimiter. This gets 

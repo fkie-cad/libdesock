@@ -1,6 +1,7 @@
 #ifdef DESOCK_BIND
 #include <sys/socket.h>
 
+#define __USE_GNU
 #define _GNU_SOURCE
 #include <unistd.h>
 

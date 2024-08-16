@@ -110,7 +110,7 @@ visible int select (int n, fd_set * restrict rfds, fd_set * restrict wfds, fd_se
 
 visible int pselect (int n, fd_set * restrict rfds, fd_set * restrict wfds, fd_set * restrict efds, const struct timespec* restrict ts, const sigset_t * restrict mask) {
     if (!rfds && !wfds && !efds) {
-        return musl_select (n, rfds, wfds, efds, ts);
+        return musl_select (n, rfds, wfds, efds, (struct timeval*) ts);
     } else {
         return internal_select (n, rfds, wfds, efds);
     }

@@ -13,14 +13,14 @@ import ctypes
 import desock
 import helper
 
-delim = b'=^..^='
+delim = b'-=^..^=-'
 
 def test_recv_trick_delimiter():
 
     fd = desock._debug_instant_fd(0)
     with helper.StdinFile() as f:
 
-        delim_test = b'Hello, this is a test string=^..^=A=B^C.D.^=Hello, this is a test string'
+        delim_test = b'Hello, this is a test string-=^..^=-A=B^C.D.^=Hello, this is a test string'
         answer1=b'Hello, this is a test string'
         answer2=b'A=B^C.D.^=Hello, this is a test string'
 
