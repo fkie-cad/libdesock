@@ -31,14 +31,16 @@ meson configure
 
 The following options are specific to libdesock:
 
-| Option          | Description                                                                                | Default |
-|-----------------|--------------------------------------------------------------------------------------------|---------|
-| `arch`          | The CPU architecture for which you are compiling libdesock.so                              | x86_64  |
-| `debug_desock`  | If this is true, calls to functions in libdesock.so get logged to stderr.                  | false   |
-| `desock_client` | If this is true, calls to `connect()` get hooked. This enables the desocketing of clients. | false   |
-| `desock_server` | If this is true, calls to `bind()` get hooked. This enables the desocketing of servers.    | true    |
-| `fd_table_size` | Only fds < `fd_table_size` can be desocked.                                                | 128     |
-| `interpreter`   | Path to ld.so (will be determined dynamically if not set)                                  |         |
+| Option           | Description                                                                                | Default |
+|------------------|--------------------------------------------------------------------------------------------|---------|
+| `arch`           | The CPU architecture for which you are compiling libdesock.so                              | x86_64  |
+| `debug_desock`   | If this is true, calls to functions in libdesock.so get logged to stderr.                  | false   |
+| `desock_client`  | If this is true, calls to `connect()` get hooked. This enables the desocketing of clients. | false   |
+| `desock_server`  | If this is true, calls to `bind()` get hooked. This enables the desocketing of servers.    | true    |
+| `allow_dup_stdin`| If this is true, calls to `dup2()` are allowed for stdin. This enables stdin redirection when running under gdb    | false   |
+| `multiple_requests`| If this is true, a delimiter will be used to return different data from subsequent read calls.     | false   |
+| `fd_table_size`  | Only fds < `fd_table_size` can be desocked.                                                | 128     |
+| `interpreter`    | Path to ld.so (will be determined dynamically if not set)                                  |         |
 
 If configuration is done compile with
 ```sh

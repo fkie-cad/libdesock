@@ -1,3 +1,11 @@
+/*
+ *
+ * Added optional support for duplicating stdin
+ *     Kelly Patterson - Cisco Talos
+ *     Copyright (C) 2024 Cisco Systems Inc
+ *
+ */
+
 #define _GNU_SOURCE
 #include <unistd.h>
 #include <string.h>
@@ -35,6 +43,14 @@ visible int dup2 (int old, int new) {
     if (r > 1) {
         while ((r = __syscall (SYS_dup2, old, new)) == -EBUSY) ;
     }
+
+    #ifdef DUP_STDIN
+    /* except in this case do allow overwriting of stdin*/
+    else if (r==0)
+    {
+        while ((r = __syscall (SYS_dup2, old, new)) == -EBUSY) ;
+    }
+    #endif
 
     if (r > -1 && VALID_FD (r) && VALID_FD (old)) {
         DEBUG_LOG ("[%d] desock::dup2(%d, %d)", gettid (), old, new);
