@@ -43,14 +43,13 @@ visible int dup2 (int old, int new) {
     if (r > 1) {
         while ((r = __syscall (SYS_dup2, old, new)) == -EBUSY) ;
     }
-
-    #ifdef DUP_STDIN
+#ifdef DUP_STDIN
     /* except in this case do allow overwriting of stdin*/
     else if (r==0)
     {
         while ((r = __syscall (SYS_dup2, old, new)) == -EBUSY) ;
     }
-    #endif
+#endif
 
     if (r > -1 && VALID_FD (r) && VALID_FD (old)) {
         DEBUG_LOG ("[%d] desock::dup2(%d, %d)", gettid (), old, new);
@@ -79,6 +78,13 @@ visible int dup3 (int old, int new, int flags) {
     if (r > 1) {
         while ((r = __syscall (SYS_dup3, old, new, flags)) == -EBUSY) ;
     }
+#ifdef DUP_STDIN
+    /* except in this case do allow overwriting of stdin*/
+    else if (r==0)
+    {
+        while ((r = __syscall (SYS_dup3, old, new, flags)) == -EBUSY) ;
+    }
+#endif
 
     if (r > -1 && VALID_FD (r) && VALID_FD (old)) {
         DEBUG_LOG ("[%d] desock::dup3(%d, %d, %d)", gettid (), old, new, flags);
