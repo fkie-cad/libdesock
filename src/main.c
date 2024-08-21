@@ -59,7 +59,7 @@ int libdesock_main (void) {
     );
 
     while (1) {
-        exit(0);
+        _Exit(0);
     }
 }
 
