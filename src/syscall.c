@@ -1,4 +1,3 @@
-
 #include "syscall.h"
 
 hidden long __syscall_cp_c ();
