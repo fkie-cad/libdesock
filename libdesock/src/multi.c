@@ -15,7 +15,6 @@
 #ifdef MULTI_REQUEST
 static const char* DELIMITER = REQUEST_DELIMITER;
 #define DELIMITER_LEN (sizeof(DELIMITER))
-#endif
 
 //TODO: hook_seek ?
 
@@ -44,6 +43,7 @@ static int is_partial_delimiter (char* start, size_t len) {
         return 0;
     }
 }
+#endif
 
 ssize_t postprocess_input (char* buf, ssize_t size) {
 #ifndef MULTI_REQUEST
