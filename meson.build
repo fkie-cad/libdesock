@@ -45,39 +45,20 @@ endif
 args += '-D REQUEST_DELIMITER="@0@"'.format(get_option('request_delimiter'))
 
 sources = [
-    'libdesock/src/accept.c',
-    'libdesock/src/bind.c',
-    'libdesock/src/close.c',
-    'libdesock/src/connect.c',
-    'libdesock/src/desock.c',
-    'libdesock/src/dup.c',
-    'libdesock/src/epoll.c',
-    'libdesock/src/getpeername.c',
-    'libdesock/src/getsockname.c',
-    'libdesock/src/listen.c',
-    'libdesock/src/peekbuffer.c',
-    'libdesock/src/poll.c',
-    'libdesock/src/read.c',
-    'libdesock/src/select.c',
-    'libdesock/src/sendfile.c',
-    'libdesock/src/shutdown.c',
-    'libdesock/src/socket.c',
-    'libdesock/src/sockopt.c',
-    'libdesock/src/syscall.c',
-    'libdesock/src/write.c',
-    'libdesock/src/hooks.c',
-    'libdesock/src/multi.c',
+    'src/main.c',
+    'src/desock.c',
+    'src/stub_sockaddr.c',
 ]
 include_directories = [
-    include_directories('libdesock/include'),
-    include_directories('libdesock/include/arch/' + get_option('arch'))
+    include_directories('include'),
+    include_directories('include/arch/' + get_option('arch'))
 ]
 
 shared_library('desock', 
     sources : sources,
     include_directories : include_directories,
-    c_args : args + ['-flto'],
-    link_args : ['-Wl,-e,desock_main', '-flto'],
+    c_args : args + ['-D SHARED', '-flto'],
+    link_args : ['-Wl,-e,libdesock_main', '-flto'],
     install : false,
     dependencies : [
         dependency('threads')
@@ -88,7 +69,6 @@ static_library('desock',
     sources : sources,
     include_directories : include_directories,
     c_args : args,
-    link_args : '-Wl,-e,desock_main',
     install : false,
     dependencies : [
         dependency('threads')

@@ -12,7 +12,7 @@ This has the advantage of
 For an in-depth explanation of de-socketing see our [blog post](https://lolcads.github.io/posts/2022/02/libdesock/).
 
 ## Building
-Libdesock uses `meson` and `ninja` as its build system.
+Libdesock uses `meson` as its build system.
 
 ```sh
 meson setup ./build
