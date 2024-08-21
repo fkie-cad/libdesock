@@ -53,6 +53,7 @@ sources = [
     'src/bind.c',
     'src/connect.c',
     'src/socket.c',
+    'src/listen.c',
 ]
 include_directories = [
     include_directories('src/include'),
