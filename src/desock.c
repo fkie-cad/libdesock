@@ -1,9 +1,12 @@
+#define _GNU_SOURCE
+#define __USE_GNU
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdarg.h>
 #include <errno.h>
 #include <semaphore.h>
+#include <unistd.h>
 
 #include "util.h"
 #include "desock.h"
@@ -32,7 +35,7 @@ void _debug (const char* fmt_string, ...) {
     va_list args;
     va_start(args, fmt_string);
     
-    fprintf(stderr, "[libdesock::debug] ");
+    fprintf(stderr, "[libdesock::debug] <%d> ", gettid());
     vfprintf(stderr, fmt_string, args);
     fprintf(stderr, "\n");
     

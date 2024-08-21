@@ -61,6 +61,9 @@ hidden long __syscall_ret(unsigned long),
 
 static inline long __alt_socketcall(int sys, int sock, int cp, long a, long b, long c, long d, long e, long f)
 {
+#ifndef SYS_socketcall
+    (void) sock;
+#endif
 	long r;
 	if (cp) r = __syscall_cp(sys, a, b, c, d, e, f);
 	else r = __syscall(sys, a, b, c, d, e, f);

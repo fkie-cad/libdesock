@@ -4,9 +4,7 @@
 #include <semaphore.h>
 #include <sys/epoll.h>
 
-/*
- * If conns >= MAX_CONNS, accept() will block
- */
+/* If conns >= MAX_CONNS, accept() will block */
 #ifndef MAX_CONNS
 #define MAX_CONNS 1
 #endif
@@ -45,5 +43,18 @@ extern sem_t sem;
 extern struct fd_entry fd_table[FD_TABLE_SIZE];
 extern int accept_block;
 extern int max_fd;
+
+__attribute__((always_inline))
+static inline void clear_fd_table_entry (int fd) {
+    fd_table[fd].domain = -1;
+    fd_table[fd].desock = 0;
+    fd_table[fd].listening = 0;
+    fd_table[fd].epfd = -1;
+}
+
+__attribute__((always_inline))
+static inline void clone_fd_table_entry (int to, int from) {
+    __builtin_memcpy(&fd_table[to], &fd_table[from], sizeof(struct fd_entry));
+}
 
 #endif /* _LIBDESOCK_DESOCK_H */

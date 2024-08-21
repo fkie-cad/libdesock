@@ -48,6 +48,8 @@ sources = [
     'src/main.c',
     'src/desock.c',
     'src/stub_sockaddr.c',
+    'src/syscall.c',
+    'src/accept.c',
 ]
 include_directories = [
     include_directories('include'),
