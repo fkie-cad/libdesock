@@ -13,11 +13,10 @@ int accept4 (int fd, struct sockaddr* addr, socklen_t* len, int flag) {
     
     DEBUG_LOG("accept4(%d, %p, %p, %d)", fd, addr, len, flag);
 
-    if (accept_block) {
+    if (LIKELY(accept_block)) {
         sem_wait(&sem);
-    } else {
-        accept_block = 1;
     }
+    accept_block = 1;
 
     int new_fd = syscall(SYS_dup, fd);
 
@@ -31,7 +30,7 @@ int accept4 (int fd, struct sockaddr* addr, socklen_t* len, int flag) {
 
     fill_sockaddr(fd, addr, len);
 
-    if (new_fd + 1 > max_fd) {
+    if (LIKELY(new_fd + 1 > max_fd)) {
         max_fd = new_fd + 1;
     }
 
