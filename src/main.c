@@ -4,11 +4,11 @@
 #include "util.h"
 
 #ifdef SHARED
-VISIBLE const char libdesock_interpreter[] __attribute__ ((section (".interp"))) = INTERPRETER;
+VISIBLE const char __libdesock_interpreter[] __attribute__ ((section (".interp"))) = INTERPRETER;
 
 VISIBLE
 __attribute__((noreturn))
-int libdesock_main (void) {
+int __libdesock_main (void) {
     printf(
         "libdesock.so: A fast desocketing library built for fuzzing\n"
         "\n"

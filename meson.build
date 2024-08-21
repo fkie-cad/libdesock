@@ -65,7 +65,7 @@ shared_library('desock',
     sources : sources,
     include_directories : include_directories,
     c_args : args + ['-D SHARED', '-flto'],
-    link_args : ['-Wl,-e,libdesock_main', '-flto'],
+    link_args : ['-Wl,-e,__libdesock_main', '-flto'],
     install : false,
     dependencies : [
         dependency('threads')
