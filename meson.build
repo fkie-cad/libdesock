@@ -51,6 +51,7 @@ sources = [
     'src/syscall.c',
     'src/accept.c',
     'src/bind.c',
+    'src/connect.c',
 ]
 include_directories = [
     include_directories('include'),
