@@ -50,6 +50,7 @@ sources = [
     'src/stub_sockaddr.c',
     'src/syscall.c',
     'src/accept.c',
+    'src/bind.c',
 ]
 include_directories = [
     include_directories('include'),

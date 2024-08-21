@@ -1,6 +1,7 @@
 #ifndef _LIBDESOCK_DESOCK_H
 #define _LIBDESOCK_DESOCK_H
 
+#include <sys/socket.h>
 #include <semaphore.h>
 #include <sys/epoll.h>
 
@@ -21,6 +22,7 @@ void _debug (char*, ...);
 #endif
 
 #define VALID_FD(x) (0 <= (x) && (x) < FD_TABLE_SIZE)
+#define DESOCK_FD(x) (VALID_FD(x) && fd_table[(x)].desock)
 
 struct fd_entry {
     /* information passed to socket() */
@@ -55,6 +57,15 @@ static inline void clear_fd_table_entry (int fd) {
 __attribute__((always_inline))
 static inline void clone_fd_table_entry (int to, int from) {
     __builtin_memcpy(&fd_table[to], &fd_table[from], sizeof(struct fd_entry));
+}
+
+__attribute__((always_inline))
+static inline int has_supported_domain (int fd) {
+    if (UNLIKELY(!VALID_FD(fd))) {
+        return 0;
+    }
+    int domain = fd_table[fd].domain;
+    return (domain == AF_INET || domain == AF_INET6);
 }
 
 #endif /* _LIBDESOCK_DESOCK_H */

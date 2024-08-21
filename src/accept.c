@@ -7,7 +7,7 @@
 
 VISIBLE
 int accept4 (int fd, struct sockaddr* addr, socklen_t* len, int flag) {
-    if (UNLIKELY(!VALID_FD(fd) || !fd_table[fd].desock)) {
+    if (UNLIKELY(!DESOCK_FD(fd))) {
         return socketcall_cp(accept4, fd, addr, len, flag, 0, 0);
     }
     
@@ -34,7 +34,7 @@ int accept4 (int fd, struct sockaddr* addr, socklen_t* len, int flag) {
         max_fd = new_fd + 1;
     }
 
-    DEBUG_LOG("    => %d\n", new_fd);
+    DEBUG_LOG("    => %d", new_fd);
     return new_fd;
 }
 
