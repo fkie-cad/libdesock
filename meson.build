@@ -8,13 +8,13 @@ else
 endif
 
 args = [
-    '-O2',
+    '-Ofast',
+    '-march=native',
+    '-fomit-frame-pointer',
+    '-fno-stack-protector',
     '-Wall',
     '-Wextra',
     '-Wpedantic',
-    '-Wno-unused-parameter',
-    '-Wno-sign-compare',
-    '-Wno-discarded-qualifiers',
     '-fvisibility=hidden',
     '-D DESOCKARCH="@0@"'.format(get_option('arch')),
     '-D MAX_CONNS=1',
@@ -66,6 +66,7 @@ sources = [
     'libdesock/src/syscall.c',
     'libdesock/src/write.c',
     'libdesock/src/hooks.c',
+    'libdesock/src/multi.c',
 ]
 include_directories = [
     include_directories('libdesock/include'),
@@ -75,8 +76,8 @@ include_directories = [
 shared_library('desock', 
     sources : sources,
     include_directories : include_directories,
-    c_args : args,
-    link_args : '-Wl,-e,desock_main',
+    c_args : args + ['-flto'],
+    link_args : ['-Wl,-e,desock_main', '-flto'],
     install : false,
     dependencies : [
         dependency('threads')
