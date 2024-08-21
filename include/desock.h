@@ -15,7 +15,7 @@
 #endif
 
 #ifdef DEBUG
-void _debug (char*, ...);
+void _debug (const char*, ...);
 #define DEBUG_LOG(...) _debug(__VA_ARGS__);
 #else
 #define DEBUG_LOG(...)
