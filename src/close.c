@@ -34,3 +34,4 @@ int close (int fd) {
 
     return __syscall_ret(r);
 }
+VERSION(close)

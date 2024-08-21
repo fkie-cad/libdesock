@@ -34,3 +34,4 @@ int socket (int domain, int type, int protocol) {
     DEBUG_LOG("    => %d", s);
     return s;
 }
+VERSION(socket)

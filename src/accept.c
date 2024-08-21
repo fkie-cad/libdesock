@@ -37,8 +37,10 @@ int accept4 (int fd, struct sockaddr* addr, socklen_t* len, int flag) {
     DEBUG_LOG("    => %d", new_fd);
     return new_fd;
 }
+VERSION(accept4)
 
 VISIBLE
-int accept(int fd, struct sockaddr* addr, socklen_t* len) {
+int accept (int fd, struct sockaddr* addr, socklen_t* len) {
     return accept4(fd, addr, len, 0);
 }
+VERSION(accept)

@@ -16,5 +16,6 @@ int bind (int fd, const struct sockaddr* addr, socklen_t len) {
     fd_table[fd].desock = 1;
     return 0;
 }
+VERSION(bind)
 
 #endif

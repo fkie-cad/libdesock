@@ -21,6 +21,10 @@ args = [
     '-D FD_TABLE_SIZE=@0@'.format(get_option('fd_table_size')),
     '-D INTERPRETER="@0@"'.format(interpreter)
 ]
+link_args = [
+    '-Wl,-e,__libdesock_main',
+    '-flto'
+]
 
 if get_option('debug_desock')
     args += '-D DEBUG'
@@ -40,6 +44,15 @@ endif
 
 if get_option('multiple_requests')
     args += '-D MULTI_REQUEST'
+endif
+
+if get_option('symbol_version') != ''
+    version_file = '@0@ {};'.format(get_option('symbol_version'))
+    file_path = '@0@/syms.map'.format(meson.build_root())
+    run_command('sh', '-c', 'echo "@0@" > @1@'.format(version_file, file_path), check: true)
+    
+    args += '-D VERSION_NAME="@0@"'.format(get_option('symbol_version'))
+    link_args += '-Wl,--version-script=@0@'.format(file_path)
 endif
 
 args += '-D REQUEST_DELIMITER="@0@"'.format(get_option('request_delimiter'))
@@ -65,7 +78,7 @@ shared_library('desock',
     sources : sources,
     include_directories : include_directories,
     c_args : args + ['-D SHARED', '-flto'],
-    link_args : ['-Wl,-e,__libdesock_main', '-flto'],
+    link_args : link_args,
     install : false,
     dependencies : [
         dependency('threads')
