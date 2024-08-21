@@ -54,8 +54,8 @@ sources = [
     'src/connect.c',
 ]
 include_directories = [
-    include_directories('include'),
-    include_directories('include/arch/' + get_option('arch'))
+    include_directories('src/include'),
+    include_directories('src/include/arch/' + get_option('arch'))
 ]
 
 shared_library('desock', 
