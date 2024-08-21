@@ -8,6 +8,7 @@
 #include "syscall.h"
 #include "peekbuffer.h"
 #include "hooks.h"
+#include "multi.h"
 
 char static_buffer[STATIC_BUFFER_SIZE];
 
@@ -70,9 +71,10 @@ int peekbuffer_read (size_t len) {
         return -1;
     }
 
-    int ret = hook_input(peekbuffer.buffer + peekbuffer.start + peekbuffer.size, len);
+    ssize_t ret = hook_input(peekbuffer.buffer + peekbuffer.start + peekbuffer.size, len);
 
-    if (ret > 0) {
+    if (ret >= 0) {
+        ret = postprocess_input(peekbuffer.buffer + peekbuffer.start + peekbuffer.size, ret);
         peekbuffer.size += ret;
     }
 

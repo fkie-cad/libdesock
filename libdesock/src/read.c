@@ -10,6 +10,7 @@
 #include "desock.h"
 #include "peekbuffer.h"
 #include "hooks.h"
+#include "multi.h"
 
 static long internal_readv (struct iovec* iov, int len, int* full, int peek, int offset) {
     int read_in = 0;
@@ -30,12 +31,14 @@ static long internal_readv (struct iovec* iov, int len, int* full, int peek, int
             }
 
             if (r < iov[i].iov_len) {
-                errno = 0;
-                r += hook_input((char *) iov[i].iov_base + r, iov[i].iov_len - r);
-
-                if (errno) {
+                ssize_t n = hook_input((char *) iov[i].iov_base + r, iov[i].iov_len - r);
+                
+                if (n < 0) {
                     return -1;
                 }
+
+                n = postprocess_input((char *) iov[i].iov_base + r, n);
+                r += n;
             }
         }
 
@@ -64,13 +67,15 @@ visible ssize_t read (int fd, void* buf, size_t count) {
         }
 
         if (offset < count) {
-            errno = 0;
-            offset += hook_input((char *) buf + offset, count - offset);
+            ssize_t n = hook_input((char *) buf + offset, count - offset);
 
-            if (errno) {
+            if (n < 0) {
                 DEBUG_LOG (" = -1\n");
                 return -1;
             }
+            
+            n = postprocess_input((char *) buf + offset, n);
+            offset += n;
         }
 
         DEBUG_LOG (" = %d\n", offset);
@@ -97,12 +102,14 @@ static ssize_t internal_recv (int fd, char* buf, size_t len, int flags) {
     }
 
     if (offset < len) {
-        errno = 0;
-        offset += hook_input(buf + offset, len - offset);
+        ssize_t n = hook_input(buf + offset, len - offset);
 
-        if (errno) {
+        if (n < 0) {
             return -1;
         }
+        
+        n = postprocess_input(buf + offset, n);
+        offset += n;
     }
 
     return offset;

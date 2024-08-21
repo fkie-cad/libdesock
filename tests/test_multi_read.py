@@ -29,12 +29,12 @@ def test_recv_trick_delimiter():
         buf = ctypes.create_string_buffer(128)
         ret = desock.recv(fd, buf, 128, 0)
         assert(ret == len(answer1))
-        assert(buf.value == answer1)
+        assert(buf.value[:ret] == answer1)
 
         buf = ctypes.create_string_buffer(128)
         ret = desock.recv(fd, buf, 128, 0)
         assert(ret == len(answer2))
-        assert(buf.value == answer2)   
+        assert(buf.value[:ret] == answer2)   
 
 def test_recv_delimiter_on_boundary():
     fd = desock._debug_instant_fd(0)
@@ -52,22 +52,22 @@ def test_recv_delimiter_on_boundary():
         buf = ctypes.create_string_buffer(64)
         ret = desock.recv(fd, buf, 64, 0)
         assert(ret == len(answer1))
-        assert(buf.value == answer1)
+        assert(buf.value[:ret] == answer1)
 
         buf = ctypes.create_string_buffer(64)
         ret = desock.recv(fd, buf, 64, 0)
         assert(ret == len(answer2))
-        assert(buf.value == answer2)
+        assert(buf.value[:ret] == answer2)
 
         buf = ctypes.create_string_buffer(64)
         ret = desock.recv(fd, buf, 64, 0)
         assert(ret == len(answer3))
-        assert(buf.value == answer3)
+        assert(buf.value[:ret] == answer3)
 
         buf = ctypes.create_string_buffer(64)
         ret = desock.recv(fd, buf, 64, 0)
         assert(ret == len(answer4))
-        assert(buf.value == answer4)
+        assert(buf.value[:ret] == answer4)
 
 
 def test_recv_multi():
@@ -81,17 +81,18 @@ def test_recv_multi():
         buf = ctypes.create_string_buffer(128)
         ret = desock.recv(fd, buf, 128, 0)
         assert(ret == 63)
-        assert(buf.value == b'A'*63)
+        assert(buf.value[:63] == b'A'*63)
 
         buf = ctypes.create_string_buffer(128)
         ret = desock.recv(fd, buf, 128, 0)
+
         assert(ret == 62)
-        assert(buf.value == b'B'*62)
+        assert(buf.value[:62] == b'B'*62)
 
         buf = ctypes.create_string_buffer(128)
         ret = desock.recv(fd, buf, 128, 0)
         assert(ret == 85)
-        assert(buf.value == b'C'*85)
+        assert(buf.value[:85] == b'C'*85)
 
 
 def test_no_delim():
