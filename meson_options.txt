@@ -1,5 +1,5 @@
 option('arch', type : 'combo', choices : ['aarch64', 'arm', 'i386', 'm68k', 'microblaze', 'mips', 'mips64', 'mipsn32', 'or1k', 'powerpc', 'powerpc64', 'riscv64', 's390x', 'sh', 'x32', 'x86_64'], value : 'x86_64')
-option('fd_table_size', type : 'integer', min : 3, max : 1024, value : 128)
+option('fd_table_size', type : 'integer', min : 3, max : 65536, value : 64)
 option('interpreter', type : 'string')
 option('desock_client', type : 'boolean', value : false)
 option('desock_server', type : 'boolean', value : true)
