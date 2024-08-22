@@ -75,6 +75,7 @@ sources = [
     'src/getsockname.c',
     'src/epoll.c',
     'src/hooks.c',
+    'src/multi.c',
 ]
 include_directories = [
     include_directories('src/include'),
