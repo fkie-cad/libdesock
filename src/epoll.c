@@ -57,8 +57,7 @@ static int do_wait (int fd, struct epoll_event* ev, int cnt) {
             if (fd_table[i].listening) {
                 server_sock = i;
             } else {
-                ev[j].events = fd_table[i].ep_event.events;
-                ev[j].events &= (EPOLLIN | EPOLLOUT);
+                ev[j].events = fd_table[i].ep_event.events & (EPOLLIN | EPOLLOUT);
                 ev[j].data = fd_table[i].ep_event.data;
                 ++j;
 
@@ -82,8 +81,7 @@ static int do_wait (int fd, struct epoll_event* ev, int cnt) {
             sem_wait(&sem);
         }
 
-        ev[j].events = fd_table[server_sock].ep_event.events;
-        ev[j].events &= EPOLLIN;
+        ev[j].events = fd_table[server_sock].ep_event.events & EPOLLIN;
         ev[j].data = fd_table[server_sock].ep_event.data;
         ++j;
 

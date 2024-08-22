@@ -1,4 +1,4 @@
-ALL_TESTS=test_accept
+ALL_TESTS=test_accept test_epoll
 
 all: $(ALL_TESTS)
 
