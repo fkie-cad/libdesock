@@ -73,6 +73,7 @@ sources = [
     'src/dup.c',
     'src/getpeername.c',
     'src/getsockname.c',
+    'src/epoll.c',
 ]
 include_directories = [
     include_directories('src/include'),
