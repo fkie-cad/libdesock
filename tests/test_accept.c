@@ -4,6 +4,8 @@
 #include <netinet/in.h>
 #include <unistd.h>
 
+#include "test_helper.h"
+
 #include "tests.h"
 
 int test_sockaddr_in (void) {
@@ -59,7 +61,7 @@ int test_out_of_fds (void) {
     struct sockaddr_in6 in;
     socklen_t in_size = sizeof(in);
     
-    for (int i = 0; i < 64 - 4; ++i) {
+    for (int i = 0; i < _libdesock_fd_table_size() - 4; ++i) {
         assert(dup(0) > 0);
     }
     

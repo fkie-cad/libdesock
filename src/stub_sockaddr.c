@@ -46,7 +46,7 @@ void fill_sockaddr (int fd, struct sockaddr* addr, socklen_t* addr_len) {
         }
 
         default: {
-            _error ("fill_sockaddr(): Invalid domain %d\n", fd_table[fd].domain);
+            __builtin_unreachable();
         }
     }
 }

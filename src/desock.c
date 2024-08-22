@@ -66,4 +66,6 @@ void __libdesock_init (void) {
     if (sem_init (&sem, 1, MAX_CONNS) == -1) {
         _error ("sem_init() failed: %s", strerror(errno));
     }
+    
+    DEBUG_LOG("libdesock loaded");
 }

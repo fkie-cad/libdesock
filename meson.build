@@ -68,6 +68,7 @@ sources = [
     'src/socket.c',
     'src/listen.c',
     'src/close.c',
+    'src/test_helper.c',
 ]
 include_directories = [
     include_directories('src/include'),

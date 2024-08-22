@@ -11,7 +11,7 @@
 
 #define VISIBLE __attribute__((visibility ("default")))
 #ifdef VERSION_NAME
-#define VERSION(name) __asm__(".symver " #name "," #name "@@@" VERSION_NAME);
+#define VERSION(name) __asm__(".symver " #name "," #name "@" VERSION_NAME);
 #else
 #define VERSION(name) __asm__("");
 #endif
