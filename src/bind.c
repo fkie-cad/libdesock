@@ -9,7 +9,7 @@
 VISIBLE
 int bind (int fd, const struct sockaddr* addr, socklen_t len) {
     if (UNLIKELY(!has_supported_domain(fd))) {
-        return socketcall (bind, fd, addr, len, 0, 0, 0);
+        return socketcall(bind, fd, addr, len, 0, 0, 0);
     }
     
     DEBUG_LOG("bind(%d, %p, %d)", fd, addr, len);

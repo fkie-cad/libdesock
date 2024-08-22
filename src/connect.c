@@ -9,7 +9,7 @@
 VISIBLE
 int connect (int fd, const struct sockaddr* addr, socklen_t len) {
     if (UNLIKELY(!has_supported_domain(fd))) {
-        return socketcall_cp (connect, fd, addr, len, 0, 0, 0);
+        return socketcall_cp(connect, fd, addr, len, 0, 0, 0);
     }
     
     DEBUG_LOG("connect(%d, %p, %d)", fd, addr, len);
