@@ -71,6 +71,8 @@ sources = [
     'src/close.c',
     'src/test_helper.c',
     'src/dup.c',
+    'src/getpeername.c',
+    'src/getsockname.c',
 ]
 include_directories = [
     include_directories('src/include'),
