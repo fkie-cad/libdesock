@@ -17,7 +17,6 @@ args = [
     '-Wpedantic',
     '-fvisibility=hidden',
     '-D DESOCKARCH="@0@"'.format(get_option('arch')),
-    '-D MAX_CONNS=1',
     '-D FD_TABLE_SIZE=@0@'.format(get_option('fd_table_size')),
     '-D INTERPRETER="@0@"'.format(interpreter)
 ]
@@ -45,6 +44,8 @@ endif
 if get_option('multiple_requests')
     args += '-D MULTI_REQUEST'
 endif
+
+args += '-D MAX_CONNS=@0@'.format(get_option('max_conns'))
 
 if get_option('symbol_version') != ''
     version_file = '@0@ {};'.format(get_option('symbol_version'))

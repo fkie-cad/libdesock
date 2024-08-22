@@ -18,6 +18,14 @@
 #endif
 #endif
 
+#ifndef MAX_CONNS
+#error "max_conns was not set"
+#endif
+
+#ifndef FD_TABLE_SIZE
+#error "fd_table_size was not set"
+#endif
+
 /* Highest file descriptor number seen so far */
 int max_fd = 0;
 

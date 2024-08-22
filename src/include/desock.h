@@ -5,15 +5,6 @@
 #include <semaphore.h>
 #include <sys/epoll.h>
 
-/* If conns >= MAX_CONNS, accept() will block */
-#ifndef MAX_CONNS
-#define MAX_CONNS 1
-#endif
-
-#ifndef FD_TABLE_SIZE
-#define FD_TABLE_SIZE 4096
-#endif
-
 #ifdef DEBUG
 void _debug (const char*, ...);
 #define DEBUG_LOG(...) _debug(__VA_ARGS__);
