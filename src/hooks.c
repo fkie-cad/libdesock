@@ -6,6 +6,8 @@
  *  in the functions below.
  */
 
+#include <unistd.h>
+
 #include "hooks.h"
 #include "syscall.h"
  
@@ -27,4 +29,14 @@ ssize_t hook_output (char* buf, size_t size) {
 #else
     return (ssize_t) size;
 #endif
+}
+
+/*  This function is called whenever libdesock internally
+ *  searches through the input stream. It MUST behave like
+ *  the lseek() function in the sense that on success, it
+ *  must return the resulting offset and on error it 
+ *  must return -1.
+ */
+ssize_t hook_seek (off_t offset) {
+    return lseek(0, offset, SEEK_CUR);
 }

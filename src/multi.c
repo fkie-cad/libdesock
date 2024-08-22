@@ -4,9 +4,7 @@
  *  Inspired by Kelly Patterson - Cisco Talos
  */
 
-#include <stdio.h>
 #include <stddef.h>
-#include <unistd.h>
 #include <string.h>
 
 #include "util.h"
@@ -30,7 +28,7 @@ static int is_partial_delimiter (char* start, size_t len) {
     if (n <= 0) {
         return 0;
     } else if (n != rem_len) {
-        if (lseek(0, -n, SEEK_CUR) == -1) {
+        if (hook_seek(-n) == -1) {
             _error("lseek on stdin failed when trying to handle partial request delimiter");
         }
         return 0;
@@ -39,7 +37,7 @@ static int is_partial_delimiter (char* start, size_t len) {
     if (!__builtin_memcmp(buf, DELIMITER, DELIMITER_LEN)) {
         return 1;
     } else {
-        if (lseek(0, -n, SEEK_CUR) == -1) {
+        if (hook_seek(-n) == -1) {
             _error("lseek on stdin failed when trying to handle partial request delimiter");
         }
         return 0;
@@ -58,7 +56,7 @@ ssize_t postprocess_input (char* buf, ssize_t size) {
     /* Search first occurence of delimiter in input */
     for (size_t i = 0; i <= size - DELIMITER_LEN; ++i) {
         if (!__builtin_memcmp(&buf[i], DELIMITER, DELIMITER_LEN)) {
-            if (lseek(0, -(size - i - DELIMITER_LEN), SEEK_CUR) == -1) {
+            if (hook_seek(-(size - i - DELIMITER_LEN)) == -1) {
                 _error("lseek on stdin failed when trying to handle request delimiter");
             }
             return i;
