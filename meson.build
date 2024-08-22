@@ -70,6 +70,7 @@ sources = [
     'src/listen.c',
     'src/close.c',
     'src/test_helper.c',
+    'src/dup.c',
 ]
 include_directories = [
     include_directories('src/include'),

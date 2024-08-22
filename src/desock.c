@@ -68,8 +68,8 @@ void _error (const char* fmt_string, ...) {
     }
 }
 
-__attribute__((constructor))
 VISIBLE
+__attribute__((constructor))
 void __libdesock_init (void) {
     if (sem_init(&sem, 1, MAX_CONNS) == -1) {
         _error("sem_init() failed: %s", strerror(errno));
