@@ -77,6 +77,7 @@ sources = [
     'src/hooks.c',
     'src/multi.c',
     'src/peekbuffer.c',
+    'src/poll.c',
 ]
 include_directories = [
     include_directories('src/include'),
