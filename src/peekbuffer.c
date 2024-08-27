@@ -69,7 +69,7 @@ static int peekbuffer_grow (size_t new_size) {
     return 0;
 }
 
-int peekbuffer_read (size_t len) {
+ssize_t peekbuffer_read (size_t len) {
     DEBUG_LOG("peekbuffer_read(%lu)", len);
 
     if (UNLIKELY(peekbuffer_grow(peekbuffer.size + len) == -1)) {
@@ -83,7 +83,7 @@ int peekbuffer_read (size_t len) {
         peekbuffer.size += ret;
     }
 
-    DEBUG_LOG(" => %d", ret);
+    DEBUG_LOG(" => %ld", ret);
     return ret;
 }
 

@@ -78,6 +78,7 @@ sources = [
     'src/multi.c',
     'src/peekbuffer.c',
     'src/poll.c',
+    'src/read.c',
 ]
 include_directories = [
     include_directories('src/include'),
