@@ -83,6 +83,7 @@ sources = [
     'src/sendfile.c',
     'src/shutdown.c',
     'src/sockopt.c',
+    'src/write.c',
 ]
 include_directories = [
     include_directories('src/include'),

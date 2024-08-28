@@ -23,7 +23,7 @@ ssize_t hook_input (char* buf, size_t size) {
  *  connection occurs. It MUST return the number of bytes
  *  written or -1 if an error occurs.
  */
-ssize_t hook_output (char* buf, size_t size) {
+ssize_t hook_output (const char* buf, size_t size) {
 #ifdef DEBUG
     return syscall_cp(SYS_write, 1, buf, size);
 #else
