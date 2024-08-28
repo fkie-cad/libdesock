@@ -80,6 +80,7 @@ sources = [
     'src/poll.c',
     'src/read.c',
     'src/select.c',
+    'src/sendfile.c',
 ]
 include_directories = [
     include_directories('src/include'),
