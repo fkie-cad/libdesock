@@ -81,6 +81,7 @@ sources = [
     'src/read.c',
     'src/select.c',
     'src/sendfile.c',
+    'src/shutdown.c',
 ]
 include_directories = [
     include_directories('src/include'),
