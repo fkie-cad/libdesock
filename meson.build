@@ -79,6 +79,7 @@ sources = [
     'src/peekbuffer.c',
     'src/poll.c',
     'src/read.c',
+    'src/select.c',
 ]
 include_directories = [
     include_directories('src/include'),
