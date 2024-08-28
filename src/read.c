@@ -116,6 +116,7 @@ ssize_t read (int fd, void* buf, size_t count) {
     DEBUG_LOG(" => %ld", offset);
     return offset;
 }
+VERSION(read)
 
 VISIBLE
 ssize_t recvfrom (int fd, void* buf, size_t len, int flags, struct sockaddr* addr, socklen_t* alen) {
