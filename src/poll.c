@@ -10,8 +10,6 @@ static int do_poll (struct pollfd* fds, nfds_t n) {
     int r = 0;
     int server_sock = -1;
     
-    accept_block = 0;
-    
     for (nfds_t i = 0; i < n; ++i) {
         if (LIKELY(DESOCK_FD(fds[i].fd))) {
             fds[i].revents = fds[i].events & (POLLIN | POLLOUT);
@@ -28,6 +26,8 @@ static int do_poll (struct pollfd* fds, nfds_t n) {
     }
     
     if (server_sock > -1) {
+        accept_block = 0;
+        
         if (UNLIKELY(sem_trywait(&sem) == -1)) {
             if (UNLIKELY(errno != EAGAIN)) {
                 _error("poll(): sem_trywait failed");
@@ -38,6 +38,7 @@ static int do_poll (struct pollfd* fds, nfds_t n) {
             } else {
                 fds[server_sock].revents = 0;
                 --r;
+                accept_block = 1;
             }
         }
     }

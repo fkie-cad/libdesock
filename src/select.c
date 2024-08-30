@@ -10,8 +10,6 @@ static int do_select (int n, fd_set* rfds, fd_set* wfds, fd_set* efds) {
     int ret = 0;
     int server_sock = -1;
 
-    accept_block = 0;
-
     for (int i = 0; i < n; ++i) {
         if (rfds && FD_ISSET(i, rfds)) {
             if (DESOCK_FD(i)) {
@@ -39,6 +37,8 @@ static int do_select (int n, fd_set* rfds, fd_set* wfds, fd_set* efds) {
     }
 
     if (server_sock > -1) {
+        accept_block = 0;
+        
         if (UNLIKELY(sem_trywait(&sem) == -1)) {
             if (UNLIKELY(errno != EAGAIN)) {
                 _error("select(): sem_trywait failed");
@@ -49,6 +49,7 @@ static int do_select (int n, fd_set* rfds, fd_set* wfds, fd_set* efds) {
             } else {
                 FD_CLR(server_sock, rfds);
                 --ret;
+                accept_block = 1;
             }
         }
     }

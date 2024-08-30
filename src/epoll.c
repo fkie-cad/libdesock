@@ -50,8 +50,6 @@ static int do_wait (int fd, struct epoll_event* ev, int cnt) {
     int j = 0;
     int server_sock = -1;
 
-    accept_block = 0;
-
     for (int i = 0; i < max_fd && j < cnt; ++i) {
         if (fd_table[i].desock && fd_table[i].epfd == fd) {
             if (fd_table[i].listening) {
@@ -69,12 +67,15 @@ static int do_wait (int fd, struct epoll_event* ev, int cnt) {
     }
 
     if (server_sock > -1 && j < cnt) {
+        accept_block = 0;
+        
         if (UNLIKELY(sem_trywait(&sem) == -1)) {
             if (UNLIKELY(errno != EAGAIN)) {
                 _error("Cannot wait for semaphore in epoll implementation");
             }
 
             if (j > 0) {
+                accept_block = 1;
                 return j;
             }
 
