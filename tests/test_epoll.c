@@ -24,7 +24,13 @@ int test_epoll (void) {
         },
     };
     assert(epoll_ctl(e, EPOLL_CTL_ADD, s, &ev) == 0);
-    //TODO: add stdin
+    ev = (struct epoll_event) {
+        .events = EPOLLOUT,
+        .data = {
+            .u64 = 1111,
+        },
+    };
+    assert(epoll_ctl(e, EPOLL_CTL_ADD, 1, &ev) == 0);
     
     struct epoll_event results[256] = {0};
     
@@ -65,6 +71,7 @@ int test_epoll (void) {
     
     /* delete server */
     assert(epoll_ctl(e, EPOLL_CTL_DEL, s, NULL) == 0);
+    assert(epoll_ctl(e, EPOLL_CTL_DEL, 1, NULL) == 0);
     
     /* wait on empty list */
     assert(epoll_wait(e, results, 256, 0) == 0);
