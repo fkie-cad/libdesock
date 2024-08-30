@@ -12,7 +12,7 @@ int main (int argc, char** argv) {
     for (unsigned int i = 0; tests[i]; ++i) {
         printf("Running test #%u\n", i);
         
-        if (!tests[i]()) {
+        if (tests[i]() != TEST_SUCCESS) {
             abort();
         }
     }

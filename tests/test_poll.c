@@ -63,10 +63,23 @@ int test_poll (void) {
     assert(fds[1].revents == 0);
     
     close(s);
-    return 1;
+    return TEST_SUCCESS;
+}
+
+int test_passthrough (void) {
+    struct pollfd p = (struct pollfd) {
+        .fd = 0,
+        .events = POLLIN,
+        .revents = 0,
+    };
+    
+    assert(poll(&p, 1, 1000) == 0);
+    
+    return TEST_SUCCESS;
 }
 
 test_fn tests [] = {
     test_poll,
+    test_passthrough,
     NULL,
 };

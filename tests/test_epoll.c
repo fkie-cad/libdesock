@@ -24,6 +24,7 @@ int test_epoll (void) {
         },
     };
     assert(epoll_ctl(e, EPOLL_CTL_ADD, s, &ev) == 0);
+    //TODO: add stdin
     
     struct epoll_event results[256] = {0};
     
@@ -71,10 +72,29 @@ int test_epoll (void) {
     close(s);
     close(e);
     
-    return 1;
+    return TEST_SUCCESS;
+}
+
+int test_passthrough (void) {
+    int e = epoll_create(0);
+    assert(e > 2);
+    
+    struct epoll_event ev = {
+        .events = EPOLLIN,
+        .data = {
+            .u64 = 0x1337,
+        },
+    };
+    assert(epoll_ctl(e, EPOLL_CTL_ADD, 0, &ev) == 0);
+    
+    struct epoll_event results[256] = {0};
+    assert(epoll_wait(e, results, 256, 1000) == 0);
+    
+    return TEST_SUCCESS;
 }
 
 test_fn tests [] = {
     test_epoll,
+    test_passthrough,
     NULL,
 };

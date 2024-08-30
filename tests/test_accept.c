@@ -27,7 +27,7 @@ int test_sockaddr_in (void) {
     assert(close(c) == 0);
     assert(close(s) == 0);
     
-    return 1;
+    return TEST_SUCCESS;
 }
 
 int test_sockaddr_in6 (void) {
@@ -54,7 +54,7 @@ int test_sockaddr_in6 (void) {
     assert(close(c) == 0);
     assert(close(s) == 0);
     
-    return 1;
+    return TEST_SUCCESS;
 }
 
 int test_out_of_fds (void) {
@@ -74,7 +74,7 @@ int test_out_of_fds (void) {
     
     close(s);
     
-    return 1;
+    return TEST_SUCCESS;
 }
 
 test_fn tests [] = {
