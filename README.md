@@ -14,6 +14,18 @@ This has multiple advantages for fuzzing:
 2. It automatically synchronizes multi-threaded programs
 3. No extra harnessing is needed to get the fuzz input to the application
 
+## Usage
+Prepend
+```sh
+LD_PRELOAD=libdesock.so
+```
+to the invocation of any network application or
+set the environment variable
+```sh
+AFL_PRELOAD=libdesock.so
+```
+when using AFL++.
+
 ## Building
 Libdesock uses `meson` as its build system.
 
@@ -54,18 +66,6 @@ meson compile
 ```
 
 This creates a shared library `build/libdesock.so` and a static library `build/libdesock.a`.
-
-## Usage
-Prepend
-```sh
-LD_PRELOAD=libdesock.so
-```
-to the invocation of any network application or
-set the environment variable
-```sh
-AFL_PRELOAD=libdesock.so
-```
-when using AFL++.
 
 ## Examples
 If you are using libdesock and AFL++ for fuzzing, the programs under test
