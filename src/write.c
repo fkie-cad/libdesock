@@ -95,11 +95,11 @@ int sendmmsg (int fd, struct mmsghdr* msgvec, unsigned int vlen, int flags) {
     for (i = 0; i < vlen; ++i) {
         ssize_t r = do_writev(msgvec[i].msg_hdr.msg_iov, msgvec[i].msg_hdr.msg_iovlen);
         
-        if (r == -1) {
+        if (r < 0) {
             return -1;
         }
         
-        msgvec[i].msg_len = r;
+        msgvec[i].msg_len = (unsigned int) r;
     }
 
     ssize_t r = (i == vlen || i == 0) ? i : (i + 1);

@@ -14,15 +14,13 @@
 
 #ifdef MULTI_REQUEST
 static const char* DELIMITER = REQUEST_DELIMITER;
-#define DELIMITER_LEN (sizeof(DELIMITER))
-
-//TODO: hook_seek ?
+#define DELIMITER_LEN (sizeof(REQUEST_DELIMITER))
 
 static int is_partial_delimiter (char* start, size_t len) {
     char buf[DELIMITER_LEN] = {0};
     memcpy(buf, start, len);
     
-    size_t rem_len = DELIMITER_LEN - len;
+    ssize_t rem_len = DELIMITER_LEN - len;
     ssize_t n = hook_input(&buf[len], rem_len);
     
     if (n <= 0) {
@@ -49,7 +47,7 @@ ssize_t postprocess_input (char* buf, ssize_t size) {
 #ifndef MULTI_REQUEST
     (void) buf;
 #else
-    if (size < DELIMITER_LEN) {
+    if (size < (ssize_t) DELIMITER_LEN) {
         return size;
     }
 
@@ -64,7 +62,7 @@ ssize_t postprocess_input (char* buf, ssize_t size) {
     }
     
     /* Search for partial delimiter at the end of input */
-    for (size_t i = size - DELIMITER_LEN + 1; i < size; ++i) {
+    for (ssize_t i = size - DELIMITER_LEN + 1; i < size; ++i) {
         if (!__builtin_memcmp(&buf[i], DELIMITER, size - i) && is_partial_delimiter(&buf[i], size - i)) {
             return i;
         }
