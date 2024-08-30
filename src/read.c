@@ -12,7 +12,7 @@
 #include "multi.h"
 #include "stub_sockaddr.h"
 
-static long do_readv (struct iovec* iov, int len, int* full, int peek, int offset) {
+static ssize_t do_readv (struct iovec* iov, int len, int* full, int peek, int offset) {
     size_t read_in = 0;
 
     if (full) {
@@ -128,8 +128,8 @@ ssize_t recvfrom (int fd, void* buf, size_t len, int flags, struct sockaddr* add
 
     fill_sockaddr(fd, addr, alen);
 
-    int r = do_recv(buf, len, flags & MSG_PEEK);
-    DEBUG_LOG(" => %d", r);
+    ssize_t r = do_recv(buf, len, flags & MSG_PEEK);
+    DEBUG_LOG(" => %ld", r);
     return r;
 }
 VERSION(recvfrom)
@@ -141,7 +141,7 @@ ssize_t recv (int fd, void* buf, size_t len, int flags) {
     }
     
     DEBUG_LOG("recv(%d, %p, %lu, %d)", fd, buf, len, flags);
-    int r = do_recv(buf, len, flags & MSG_PEEK);
+    ssize_t r = do_recv(buf, len, flags & MSG_PEEK);
     DEBUG_LOG(" => %d", r);
     return r;
 }
@@ -175,7 +175,8 @@ ssize_t recvmsg (int fd, struct msghdr* msg, int flags) {
 
     fill_sockaddr(fd, msg->msg_name, &msg->msg_namelen);
 
-    int r = do_readv(msg->msg_iov, msg->msg_iovlen, NULL, peek, 0);
+    ssize_t r = do_readv(msg->msg_iov, msg->msg_iovlen, NULL, peek, 0);
+    DEBUG_LOG(" => %ld", r);
     return r;
 }
 VERSION(recvmsg)
@@ -189,7 +190,7 @@ int recvmmsg (int fd, struct mmsghdr* msgvec, unsigned int vlen, int flags, stru
     DEBUG_LOG("recvmmsg(%d, %p, %d, %d, %p)", fd, msgvec, vlen, flags, timeout);
 
     unsigned int i;
-    int offset = 0;
+    ssize_t offset = 0;
     long r;
     int peek = flags & MSG_PEEK;
 
@@ -218,12 +219,11 @@ int recvmmsg (int fd, struct mmsghdr* msgvec, unsigned int vlen, int flags, stru
 
         r = do_readv(msgvec[i].msg_hdr.msg_iov, msgvec[i].msg_hdr.msg_iovlen, &full, peek, offset);
         
-        msgvec[i].msg_len = r;
-
         if (UNLIKELY(r < 0)) {
             return -1;
         }
-
+        
+        msgvec[i].msg_len = (unsigned int) r;
         offset += r;
 
         if (!full) {

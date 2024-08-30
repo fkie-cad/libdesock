@@ -44,7 +44,7 @@ static int do_select (int n, fd_set* rfds, fd_set* wfds, fd_set* efds) {
                 _error("select(): sem_trywait failed");
             }
 
-            if (ret == 1) {
+            if (ret <= 1) {
                 sem_wait(&sem);
             } else {
                 FD_CLR(server_sock, rfds);

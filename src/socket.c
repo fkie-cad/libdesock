@@ -31,7 +31,7 @@ int socket (int domain, int type, int protocol) {
     }
 
     s = __syscall_ret(s);
-    DEBUG_LOG("    => %d", s);
+    DEBUG_LOG(" => %d", s);
     return s;
 }
 VERSION(socket)
