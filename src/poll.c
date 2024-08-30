@@ -1,3 +1,5 @@
+#define _GNU_SOURCE
+#define __USE_GNU
 #include <poll.h>
 
 #include "util.h"
