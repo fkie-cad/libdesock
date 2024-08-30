@@ -13,8 +13,7 @@
 #include "multi.h"
 
 #ifdef MULTI_REQUEST
-static const char* DELIMITER = REQUEST_DELIMITER;
-#define DELIMITER_LEN (sizeof(REQUEST_DELIMITER))
+#define DELIMITER_LEN (sizeof(REQUEST_DELIMITER) - 1)
 
 static int is_partial_delimiter (char* start, size_t len) {
     char buf[DELIMITER_LEN] = {0};
@@ -32,7 +31,7 @@ static int is_partial_delimiter (char* start, size_t len) {
         return 0;
     }
     
-    if (!__builtin_memcmp(buf, DELIMITER, DELIMITER_LEN)) {
+    if (!__builtin_memcmp(buf, REQUEST_DELIMITER, DELIMITER_LEN)) {
         return 1;
     } else {
         if (hook_seek(-n) == -1) {
@@ -53,7 +52,7 @@ ssize_t postprocess_input (char* buf, ssize_t size) {
 
     /* Search first occurence of delimiter in input */
     for (size_t i = 0; i <= size - DELIMITER_LEN; ++i) {
-        if (!__builtin_memcmp(&buf[i], DELIMITER, DELIMITER_LEN)) {
+        if (!__builtin_memcmp(&buf[i], REQUEST_DELIMITER, DELIMITER_LEN)) {
             if (hook_seek(-(size - i - DELIMITER_LEN)) == -1) {
                 _error("lseek on stdin failed when trying to handle request delimiter");
             }
@@ -63,7 +62,7 @@ ssize_t postprocess_input (char* buf, ssize_t size) {
     
     /* Search for partial delimiter at the end of input */
     for (ssize_t i = size - DELIMITER_LEN + 1; i < size; ++i) {
-        if (!__builtin_memcmp(&buf[i], DELIMITER, size - i) && is_partial_delimiter(&buf[i], size - i)) {
+        if (!__builtin_memcmp(&buf[i], REQUEST_DELIMITER, size - i) && is_partial_delimiter(&buf[i], size - i)) {
             return i;
         }
     }
