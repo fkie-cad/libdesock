@@ -70,7 +70,7 @@ static int do_wait (int fd, struct epoll_event* ev, int cnt) {
 
     if (server_sock > -1 && j < cnt) {
         if (UNLIKELY(sem_trywait(&sem) == -1)) {
-            if (errno != EAGAIN) {
+            if (UNLIKELY(errno != EAGAIN)) {
                 _error("Cannot wait for semaphore in epoll implementation");
             }
 

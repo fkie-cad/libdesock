@@ -205,7 +205,7 @@ int recvmmsg (int fd, struct mmsghdr* msgvec, unsigned int vlen, int flags, stru
 
         long delta = total_length - peekbuffer_size();
 
-        if (delta > 0 && peekbuffer_read(delta) == -1) {
+        if (UNLIKELY(delta > 0 && peekbuffer_read(delta) == -1)) {
             return -1;
         }
     }
@@ -246,7 +246,6 @@ ssize_t readv (int fd, struct iovec* iov, int count) {
     DEBUG_LOG("readv(%d, %p, %d)", fd, iov, count);
     int r = do_readv(iov, count, NULL, 0, 0);
     DEBUG_LOG(" => %d", r);
-    
     return r;
 }
 VERSION(readv)

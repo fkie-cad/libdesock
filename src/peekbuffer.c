@@ -49,7 +49,7 @@ static int peekbuffer_grow (size_t new_size) {
             
             char* buffer = malloc(capacity);
 
-            if (NULL == buffer) {
+            if (UNLIKELY(NULL == buffer)) {
                 errno = ENOMEM;
                 return -1;
             }

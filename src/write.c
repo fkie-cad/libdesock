@@ -95,7 +95,7 @@ int sendmmsg (int fd, struct mmsghdr* msgvec, unsigned int vlen, int flags) {
     for (i = 0; i < vlen; ++i) {
         ssize_t r = do_writev(msgvec[i].msg_hdr.msg_iov, msgvec[i].msg_hdr.msg_iovlen);
         
-        if (r < 0) {
+        if (UNLIKELY(r < 0)) {
             return -1;
         }
         

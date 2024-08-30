@@ -25,7 +25,7 @@ static int is_partial_delimiter (char* start, size_t len) {
     if (n <= 0) {
         return 0;
     } else if (n != rem_len) {
-        if (hook_seek(-n) == -1) {
+        if (UNLIKELY(hook_seek(-n) == -1)) {
             _error("lseek on stdin failed when trying to handle partial request delimiter");
         }
         return 0;
@@ -34,7 +34,7 @@ static int is_partial_delimiter (char* start, size_t len) {
     if (!__builtin_memcmp(buf, REQUEST_DELIMITER, DELIMITER_LEN)) {
         return 1;
     } else {
-        if (hook_seek(-n) == -1) {
+        if (UNLIKELY(hook_seek(-n) == -1)) {
             _error("lseek on stdin failed when trying to handle partial request delimiter");
         }
         return 0;

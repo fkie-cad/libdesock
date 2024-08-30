@@ -21,7 +21,7 @@ int accept4 (int fd, struct sockaddr* addr, socklen_t* len, int flag) {
     int new_fd = syscall(SYS_dup, fd);
 
     if (UNLIKELY(!VALID_FD(new_fd))) {
-        DEBUG_LOG("    => -1");
+        DEBUG_LOG(" => -1");
         return -1;
     }
 
@@ -34,7 +34,7 @@ int accept4 (int fd, struct sockaddr* addr, socklen_t* len, int flag) {
         max_fd = new_fd + 1;
     }
 
-    DEBUG_LOG("    => %d", new_fd);
+    DEBUG_LOG(" => %d", new_fd);
     return new_fd;
 }
 VERSION(accept4)
