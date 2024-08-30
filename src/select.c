@@ -6,6 +6,20 @@
 #include "desock.h"
 #include "syscall.h"
 
+static int has_desock_fds (int n, fd_set* rfds, fd_set* wfds) {
+    for (int i = 0; i < n; ++i) {
+        if (rfds && FD_ISSET(i, rfds) && DESOCK_FD(i)) {
+            return 1;
+        }
+        
+        if (wfds && FD_ISSET(i, wfds) && DESOCK_FD(i)) {
+            return 1;
+        }
+    }
+    
+    return 0;
+}
+
 static int do_select (int n, fd_set* rfds, fd_set* wfds, fd_set* efds) {
     int ret = 0;
     int server_sock = -1;
@@ -27,13 +41,13 @@ static int do_select (int n, fd_set* rfds, fd_set* wfds, fd_set* efds) {
             if (DESOCK_FD(i) && !fd_table[i].listening) {
                 ++ret;
             } else {
-                FD_CLR (i, wfds);
+                FD_CLR(i, wfds);
             }
         }
     }
 
     if (efds) {
-        explicit_bzero(efds, sizeof (fd_set));
+        explicit_bzero(efds, sizeof(fd_set));
     }
 
     if (server_sock > -1) {
@@ -98,7 +112,7 @@ static int musl_select (int n, fd_set* rfds, fd_set* wfds, fd_set* efds, struct 
 
 VISIBLE
 int select (int n, fd_set* rfds, fd_set* wfds, fd_set* efds, struct timeval* tv) {
-    if (UNLIKELY(!rfds && !wfds && !efds)) {
+    if (UNLIKELY(!has_desock_fds(n, rfds, wfds) || (!rfds && !wfds && !efds))) {
         return musl_select(n, rfds, wfds, efds, tv);
     }
     
@@ -113,7 +127,7 @@ VISIBLE
 int pselect (int n, fd_set* rfds, fd_set* wfds, fd_set* efds, const struct timespec* ts, const sigset_t* mask) {
     (void) mask;
     
-    if (UNLIKELY(!rfds && !wfds && !efds)) {
+    if (UNLIKELY(!has_desock_fds(n, rfds, wfds) || (!rfds && !wfds && !efds))) {
         return musl_select(n, rfds, wfds, efds, (struct timeval*) ts);
     }
     
