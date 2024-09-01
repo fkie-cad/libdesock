@@ -1,6 +1,5 @@
 /*
  *  Support for multiple requests in a single input file by separating them with a given delimiter.
- *  This assumes that the input is coming from stdin.
  *  Inspired by Kelly Patterson - Cisco Talos
  */
 

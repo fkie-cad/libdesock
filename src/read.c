@@ -164,7 +164,7 @@ ssize_t recvmsg (int fd, struct msghdr* msg, int flags) {
             total_length += msg->msg_iov[i].iov_len;
         }
 
-        long delta = total_length - peekbuffer_size();
+        ssize_t delta = total_length - peekbuffer_size();
 
         if (UNLIKELY(delta > 0 && peekbuffer_read(delta) == -1)) {
             return -1;
@@ -191,7 +191,7 @@ int recvmmsg (int fd, struct mmsghdr* msgvec, unsigned int vlen, int flags, stru
 
     unsigned int i;
     ssize_t offset = 0;
-    long r;
+    ssize_t r;
     int peek = flags & MSG_PEEK;
 
     if (peek) {
@@ -203,7 +203,7 @@ int recvmmsg (int fd, struct mmsghdr* msgvec, unsigned int vlen, int flags, stru
             }
         }
 
-        long delta = total_length - peekbuffer_size();
+        ssize_t delta = total_length - peekbuffer_size();
 
         if (UNLIKELY(delta > 0 && peekbuffer_read(delta) == -1)) {
             return -1;
