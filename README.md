@@ -7,12 +7,15 @@ libdesock solves this problem by a) redirecting network I/O to stdin and stdout,
 as a sequence of chunks that get individually fed to the application.
 
 It functions as a library that when preloaded with `LD_PRELOAD` replaces the network stack of the
-libc with its own implementation that emulates all network operations in user-space.   
+libc with its own stack that emulates all network operations in user-space.   
 This has multiple advantages for fuzzing:
 
 1. It reduces the syscalls of the target
 2. It automatically synchronizes multi-threaded programs
 3. No extra harnessing is needed to get the fuzz input to the application
+
+libdesock also let's you customize what happens when an application requests data over a network connection.
+The default is to read from stdin but this can be changed inside the so-called "input hook".
 
 ## How to use
 Prepend
@@ -58,7 +61,7 @@ The following options are specific to libdesock:
 | `fd_table_size`  | Only fds < `fd_table_size` can be desocked                                                | 128     |
 | `interpreter`    | Path to ld.so (will be determined dynamically if not set)                                  |         |
 | `symbol_version` | If this is set, every exported symbol has this version |  |
-| `max_conns` | The number of simulatenous connections that can be desocketed. Any value > 1 doesn't really make sense in the default configuration | 1 |
+| `max_conns` | The number of simulatenous connections that can be desocketed. A value other than 1 doesn't make sense at the moment | 1 |
 
 If configuration is done compile with
 ```sh
