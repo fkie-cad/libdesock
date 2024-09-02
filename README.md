@@ -15,7 +15,7 @@ This has multiple advantages for fuzzing:
 3. No extra harnessing is needed to get the fuzz input to the application
 
 libdesock also let's you customize what happens when an application requests data over a network connection.
-The default is to read from stdin but this can be changed inside the so-called "input hook".
+The default is to read from stdin but this can be changed inside the so-called "input hook" (see `src/hooks.c`).
 
 ## How to use
 Prepend
