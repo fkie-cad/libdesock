@@ -16,4 +16,3 @@ LD_PRELOAD=../build/libdesock.so <TEST>
 ```
 
 All tests should exit with status code 0.
- 

@@ -46,7 +46,7 @@ static int do_select (int n, fd_set* rfds, fd_set* wfds, fd_set* efds) {
         }
     }
 
-    if (efds) {
+    if (UNLIKELY(efds)) {
         explicit_bzero(efds, sizeof(fd_set));
     }
 
