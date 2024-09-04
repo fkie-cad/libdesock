@@ -39,6 +39,6 @@ ssize_t hook_output (const char* buf, size_t size) {
  *  The supplied offset always is relative to the current
  *  stream position.
  */
-ssize_t hook_seek (off_t offset) {
+off_t hook_seek (off_t offset) {
     return lseek(0, offset, SEEK_CUR);
 }
