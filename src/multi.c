@@ -46,11 +46,13 @@ ssize_t postprocess_input (char* buf, ssize_t size) {
     (void) buf;
 #else
     if (size < (ssize_t) DELIMITER_LEN) {
-        if (is_partial_delimiter(buf, size)) {
-            return 0;
-        } else {
-            return size;
+        for (ssize_t i = 0; i < size; ++i) {
+            if (!__builtin_memcmp(&buf[i], REQUEST_DELIMITER, size - i) && is_partial_delimiter(&buf[i], size - i)) {
+                return i;
+            }
         }
+        
+        return size;
     }
 
     /* Search first occurence of delimiter in input */

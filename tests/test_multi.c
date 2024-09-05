@@ -85,9 +85,47 @@ int test_multi_partial (void) {
     return TEST_SUCCESS;
 }
 
+int test_multi_peek (void) {
+    int s = socket(AF_INET, SOCK_STREAM, 0);
+    assert(s > 2);
+    assert(connect(s, NULL, 0) == 0);
+
+    stdin_file_create("12345678---ABC---");
+
+    char buf[256];
+
+    // Peek only for the next packet, never beyond
+    for (size_t i = 1; i < 8; ++i) {
+        assert(recv(s, buf, i, MSG_PEEK) == (ssize_t) i);
+        assert(memcmp(buf, "12345678", i) == 0);
+    }
+
+    assert(recv(s, buf, 9, MSG_PEEK) == 8);
+    assert(recv(s, buf, 10, MSG_PEEK) == 8);
+    assert(recv(s, buf, 11, MSG_PEEK) == 8);
+    
+    assert(recv(s, buf, sizeof(buf), MSG_PEEK) == 8);
+
+    // Release peekbuffer
+    assert(recv(s, buf, sizeof(buf), 0) == 8);
+
+    // Peek but without locking peekbuffer
+    assert(recv(s, buf, 2, MSG_PEEK) == 2);
+    assert(memcmp(buf, "AB", 2) == 0);
+
+    assert(recv(s, buf, 4, 0) == 3);
+    assert(memcmp(buf, "ABC", 2) == 0);
+    
+    assert(recv(s, buf, sizeof(buf), 0) == 0);
+    
+    stdin_file_destroy();
+    return TEST_SUCCESS;
+}
+
 test_fn tests [] = {
     test_multi_simple,
     test_multi_simple_fucked_up,
     test_multi_partial,
+    test_multi_peek,
     NULL,
 };

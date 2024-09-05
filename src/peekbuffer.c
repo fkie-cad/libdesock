@@ -13,6 +13,9 @@ typedef struct {
     size_t start;
     size_t size;
     size_t capacity;
+#ifdef MULTI_REQUEST
+    char locked;
+#endif
 } peekbuffer_t;
 
 #define STATIC_BUFFER_SIZE 1048576
@@ -23,7 +26,10 @@ static peekbuffer_t peekbuffer = {
     .buffer = static_buffer,
     .start = 0,
     .size = 0,
-    .capacity = STATIC_BUFFER_SIZE
+    .capacity = STATIC_BUFFER_SIZE,
+#ifdef MULTI_REQUEST
+    .locked = 0,
+#endif
 };
 
 static size_t next_pow_2 (size_t size) {
@@ -45,7 +51,7 @@ static int peekbuffer_grow (size_t new_size) {
             peekbuffer.start = 0;
         } else {
             size_t capacity = next_pow_2(new_size);
-            DEBUG_LOG("Reallocating peekbuffer to size %lu", capacity);
+            DEBUG_LOG("  Reallocating peekbuffer to size %lu", capacity);
             
             char* buffer = malloc(capacity);
 
@@ -70,7 +76,14 @@ static int peekbuffer_grow (size_t new_size) {
 }
 
 ssize_t peekbuffer_read (size_t len) {
-    DEBUG_LOG("peekbuffer_read(%lu)", len);
+    DEBUG_LOG("  peekbuffer_read(%lu)", len);
+
+#ifdef MULTI_REQUEST
+    if (peekbuffer.locked) {
+        DEBUG_LOG("   => (locked)");
+        return 0;
+    }
+#endif
 
     if (UNLIKELY(peekbuffer_grow(peekbuffer.size + len) == -1)) {
         return -1;
@@ -79,16 +92,23 @@ ssize_t peekbuffer_read (size_t len) {
     ssize_t ret = hook_input(peekbuffer.buffer + peekbuffer.start + peekbuffer.size, len);
 
     if (LIKELY(ret >= 0)) {
-        ret = postprocess_input(peekbuffer.buffer + peekbuffer.start + peekbuffer.size, ret);
-        peekbuffer.size += ret;
+        ssize_t new_ret = postprocess_input(peekbuffer.buffer + peekbuffer.start + peekbuffer.size, ret);
+
+#ifdef MULTI_REQUEST
+        if (new_ret < ret) {
+            peekbuffer.locked = 1;
+        }
+#endif
+
+        peekbuffer.size += new_ret;
     }
 
-    DEBUG_LOG(" => %ld", ret);
+    DEBUG_LOG("   => %ld", ret);
     return ret;
 }
 
 size_t peekbuffer_cp (char* dest, size_t len, size_t offset) {
-    DEBUG_LOG("peekbuffer_cp(%p, %lu, %lu)", dest, len, offset);
+    DEBUG_LOG("  peekbuffer_cp(%p, %lu, %lu)", dest, len, offset);
 
     if (UNLIKELY(offset >= peekbuffer.size)) {
         return 0;
@@ -96,18 +116,22 @@ size_t peekbuffer_cp (char* dest, size_t len, size_t offset) {
 
     len = MIN(len, peekbuffer.size - offset);
     memcpy(dest, peekbuffer.buffer + peekbuffer.start + offset, len);
-    DEBUG_LOG(" => %lu", len);
+    DEBUG_LOG("   => %lu", len);
     return len;
 }
 
 size_t peekbuffer_mv (char* dest, size_t len) {
-    DEBUG_LOG("peekbuffer_mv(%p, %lu)", dest, len);
+    DEBUG_LOG("  peekbuffer_mv(%p, %lu)", dest, len);
 
     size_t ret = peekbuffer_cp(dest, len, 0);
     peekbuffer.size -= ret;
 
     if (peekbuffer.size == 0) {
         peekbuffer.start = 0;
+
+#ifdef MULTI_REQUEST
+        peekbuffer.locked = 0;
+#endif
     } else {
         peekbuffer.start += ret;
     }
@@ -117,4 +141,12 @@ size_t peekbuffer_mv (char* dest, size_t len) {
 
 size_t peekbuffer_size (void) {
     return peekbuffer.size;
+}
+
+char peekbuffer_locked (void) {
+#ifdef MULTI_REQUEST
+    return peekbuffer.locked;
+#else
+    return 0;
+#endif
 }

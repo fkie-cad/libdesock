@@ -26,11 +26,15 @@ static ssize_t do_readv (struct iovec* iov, int len, int* full, int peek, int of
             r = peekbuffer_cp(iov[i].iov_base, iov[i].iov_len, offset);
             offset += r;
         } else {
+            char was_locked = 0;
+            
             if (peekbuffer_size() > 0) {
+                was_locked = peekbuffer_locked();
+                
                 r = peekbuffer_mv(iov[i].iov_base, iov[i].iov_len);
             }
 
-            if (r < iov[i].iov_len) {
+            if (!was_locked && r < iov[i].iov_len) {
                 ssize_t n = hook_input((char *) iov[i].iov_base + r, iov[i].iov_len - r);
                 
                 if (UNLIKELY(n < 0)) {
@@ -71,7 +75,13 @@ static ssize_t do_recv (char* buf, size_t len, int peek) {
     }
     
     if (buflen > 0) {
+        char was_locked = peekbuffer_locked();
+
         offset = peekbuffer_mv(buf, len);
+
+        if (was_locked) {
+            return offset;
+        }
     }
 
     if (offset < len) {
