@@ -76,5 +76,5 @@ usually require a special setup to work with AFL++. Checkout our [examples](./ex
 directory for some examples on how to properly setup network applications for fuzzing.
 
 ## Known bugs
-- TCP servers using [libuv](https://libuv.org/) cannot be de-socket-ed (yet). De-socketing of libuv currently only works with UDP servers. It only takes a small change to fix this though, if you need this, create an issue.
+- TCP servers using [libuv](https://libuv.org/) cannot be desocketed (yet). Desocketing of libuv currently only works with UDP servers. It only takes a small change to fix this though, if you need this, create an issue.
 - `ioctl()` is not supported. Make sure your target does not rely on `ioctl` requests

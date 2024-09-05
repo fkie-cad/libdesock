@@ -20,7 +20,7 @@ static const struct sockaddr_in6 STUB_IPv6 = {
 };
 
 /*
- * Given an fd that is being desocked, fill the given sockaddr structure
+ * Given an fd that is being desocketed, fill the given sockaddr structure
  * with a stub from above.
  */
 void fill_sockaddr (int fd, struct sockaddr* addr, socklen_t* addr_len) {

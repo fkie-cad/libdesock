@@ -32,7 +32,7 @@ int max_fd = 0;
 /* Indicates whether the next call to accept() should block or not */
 int accept_block = 1;
 
-/* Table that holds metadata about desocked file descriptors */
+/* Table that holds metadata about desocketed file descriptors */
 struct fd_entry fd_table[FD_TABLE_SIZE];
 
 /* Semaphore for synchronization of the connection pool in multi-threaded applications. */
