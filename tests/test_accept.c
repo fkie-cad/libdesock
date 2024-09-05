@@ -61,19 +61,19 @@ int test_out_of_fds (void) {
     struct sockaddr_in6 in;
     socklen_t in_size = sizeof(in);
     
-    for (int i = 0; i < _libdesock_fd_table_size() - 4; ++i) {
-        assert(dup(0) > 0);
-    }
+    while (dup(0) < _libdesock_fd_table_size());
+
+    int target_fd = _libdesock_fd_table_size() - 1;
+    close(target_fd);
     
     int s = socket(AF_INET6, SOCK_STREAM, 0);
-    assert(s == 63);
+    assert(s == target_fd);
     assert(bind(s, NULL, 0) == 0);
     assert(listen(s, 0) == 0);
     int c = accept(s, (struct sockaddr*) &in, &in_size);
     assert(c == -1);
     
     close(s);
-    
     return TEST_SUCCESS;
 }
 
