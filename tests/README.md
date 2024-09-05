@@ -2,7 +2,7 @@
 
 First, build libdesock with:
 ```
-meson configure -D debug_desock=true -D desock_client=true -D desock_server=true -D multiple_requests=true -D request_delimiter="---"
+meson configure -D debug_desock=true -D desock_client=true -D desock_server=true -D multiple_requests=true -D request_delimiter="---" -D allow_dup_stdin=true
 ```
  
 Then, build the tests:

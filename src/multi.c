@@ -24,7 +24,7 @@ static int is_partial_delimiter (char* start, size_t len) {
     if (n <= 0) {
         return 0;
     } else if (n != rem_len) {
-        if (UNLIKELY(hook_seek(-n) == -1)) {
+        if (UNLIKELY(hook_seek(-n) < 0)) {
             _error("lseek on stdin failed when trying to handle partial request delimiter");
         }
         return 0;
@@ -33,7 +33,7 @@ static int is_partial_delimiter (char* start, size_t len) {
     if (!__builtin_memcmp(buf, REQUEST_DELIMITER, DELIMITER_LEN)) {
         return 1;
     } else {
-        if (UNLIKELY(hook_seek(-n) == -1)) {
+        if (UNLIKELY(hook_seek(-n) < 0)) {
             _error("lseek on stdin failed when trying to handle partial request delimiter");
         }
         return 0;
@@ -46,13 +46,17 @@ ssize_t postprocess_input (char* buf, ssize_t size) {
     (void) buf;
 #else
     if (size < (ssize_t) DELIMITER_LEN) {
-        return size;
+        if (is_partial_delimiter(buf, size)) {
+            return 0;
+        } else {
+            return size;
+        }
     }
 
     /* Search first occurence of delimiter in input */
     for (size_t i = 0; i <= size - DELIMITER_LEN; ++i) {
         if (!__builtin_memcmp(&buf[i], REQUEST_DELIMITER, DELIMITER_LEN)) {
-            if (hook_seek(-(size - i - DELIMITER_LEN)) == -1) {
+            if (hook_seek(-(size - i - DELIMITER_LEN)) < 0) {
                 _error("lseek on stdin failed when trying to handle request delimiter");
             }
             return i;

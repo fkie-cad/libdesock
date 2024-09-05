@@ -39,9 +39,13 @@ int dup2 (int old, int new) {
 #ifdef DUP_STDIN
     /* except in this case do allow overwriting of stdin*/
     else if (r==0) {
+        DEBUG_LOG("Overwriting stdin...");
         while ((r = __syscall(SYS_dup2, old, new)) == -EBUSY) ;
     }
 #endif
+    else {
+        DEBUG_LOG("Skipping dup of fd %d...", r);
+    }
 
     if (LIKELY(VALID_FD(r) && VALID_FD(old))) {
         DEBUG_LOG("dup2(%d, %d) = %d", old, new, r);
@@ -68,9 +72,13 @@ int dup3 (int old, int new, int flags) {
 #ifdef DUP_STDIN
     /* except in this case do allow overwriting of stdin*/
     else if (r==0) {
+        DEBUG_LOG("Overwriting stdin...");
         while ((r = __syscall(SYS_dup3, old, new, flags)) == -EBUSY) ;
     }
 #endif
+    else {
+        DEBUG_LOG("Skipping dup of fd %d...", r);
+    }
 
     if (LIKELY(VALID_FD(r) && VALID_FD(old))) {
         DEBUG_LOG("dup3(%d, %d, %d) = %d", old, new, flags, r);
