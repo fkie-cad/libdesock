@@ -8,8 +8,6 @@
 #include "test_helper.h"
 #include "tests.h"
 
-int counter = 0;
-
 void* thread_handler (void* arg) {
     int fd = (int)(long) arg;
     assert(fd == 4); // this is the check for synchronization
