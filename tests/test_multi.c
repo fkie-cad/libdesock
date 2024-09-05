@@ -112,13 +112,14 @@ int test_multi_peek (void) {
     // Peek but without locking peekbuffer
     assert(recv(s, buf, 2, MSG_PEEK) == 2);
     assert(memcmp(buf, "AB", 2) == 0);
-
+    
     assert(recv(s, buf, 4, 0) == 3);
     assert(memcmp(buf, "ABC", 2) == 0);
     
     assert(recv(s, buf, sizeof(buf), 0) == 0);
     
     stdin_file_destroy();
+    close(s);
     return TEST_SUCCESS;
 }
 
