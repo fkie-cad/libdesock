@@ -15,7 +15,7 @@ This has multiple advantages for fuzzing:
 3. No extra harnessing is needed to get the fuzz input to the application
 
 libdesock also let's you customize what happens when an application requests data over a network connection.
-The default is to read from stdin but this can be changed inside the so-called "input hook" (see `src/hooks.c`).
+The default behavior is to read from stdin but this can be changed inside the "input hook" (see `src/hooks.c`).
 
 ## How to use
 Prepend
@@ -58,7 +58,7 @@ The following options are specific to libdesock:
 | `desock_server`  | If this is true, calls to `bind()` get hooked. This enables the desocketing of servers    | true    |
 | `allow_dup_stdin`| If this is true, calls to `dup*()` are allowed for stdin. This enables stdin redirection when running under gdb    | false   |
 | `debug_desock`   | If this is true, calls to functions in libdesock.so get logged to stderr                  | false   |
-| `fd_table_size`  | Only fds < `fd_table_size` can be desocked                                                | 128     |
+| `fd_table_size`  | Only fds < `fd_table_size` can be desocketed                                                | 128     |
 | `interpreter`    | Path to ld.so (will be determined dynamically if not set)                                  |         |
 | `symbol_version` | If this is set, every exported symbol has this version |  |
 | `max_conns` | The number of simulatenous connections that can be desocketed. A value other than 1 doesn't make sense at the moment | 1 |
