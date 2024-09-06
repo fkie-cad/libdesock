@@ -72,8 +72,11 @@ This creates a shared library `build/libdesock.so` and a static library `build/l
 
 ## How to fuzz
 If you are using libdesock and AFL++ for fuzzing, the programs under test
-usually require a special setup to work with AFL++. Checkout our [examples](./examples) 
-directory for some examples on how to properly setup network applications for fuzzing.
+usually require a special setup to work with AFL++. Check out our [examples](./examples) 
+directory for some examples on how to setup network applications for fuzzing.
+
+Additionally, you can also read up on how libdesock got used by other researchers to fuzz...
+- [µC/OS by Cisco Talos](https://blog.talosintelligence.com/fuzzing-uc-os-protocol-stacks/)
 
 ## Known bugs
 - TCP servers using [libuv](https://libuv.org/) cannot be desocketed (yet). Desocketing of libuv currently only works with UDP servers. It only takes a small change to fix this though, if you need this, create an issue.
