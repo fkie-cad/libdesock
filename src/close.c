@@ -10,15 +10,15 @@ int close (int fd) {
     if (LIKELY(VALID_FD(fd))) {
         if (fd_table[fd].desock) {
             DEBUG_LOG("close(%d)", fd);
-        }
 
-        if (fd_table[fd].desock && !fd_table[fd].listening) {
-            if (UNLIKELY(sem_getvalue(&sem, &sem_value) == -1)) {
-                return -1;
-            }
+            if (!fd_table[fd].listening) {
+                if (UNLIKELY(sem_getvalue(&sem, &sem_value) == -1)) {
+                    return -1;
+                }
 
-            if (sem_value < MAX_CONNS) {
-                sem_post(&sem);
+                if (sem_value < MAX_CONNS) {
+                    sem_post(&sem);
+                }
             }
         }
 

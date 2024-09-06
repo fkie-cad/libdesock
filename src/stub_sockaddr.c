@@ -30,18 +30,20 @@ void fill_sockaddr (int fd, struct sockaddr* addr, socklen_t* addr_len) {
     
     switch (fd_table[fd].domain) {
         case AF_INET: {
-            if (UNLIKELY(*addr_len != sizeof(STUB_IPv4))) {
+            if (UNLIKELY(*addr_len < sizeof(STUB_IPv4))) {
                 _error("fill_sockaddr() got an invalid size of sockaddr_in structure: %lu", (size_t) *addr_len);
             }
             __builtin_memcpy(addr, (void*) &STUB_IPv4, sizeof(STUB_IPv4));
+            *addr_len = sizeof(STUB_IPv4);
             break;
         }
 
         case AF_INET6: {
-            if (UNLIKELY(*addr_len != sizeof(STUB_IPv6))) {
+            if (UNLIKELY(*addr_len < sizeof(STUB_IPv6))) {
                 _error("fill_sockaddr() got an invalid size of sockaddr_in6 structure: %lu", (size_t) *addr_len);
             }
             __builtin_memcpy(addr, (void*) &STUB_IPv6, sizeof(STUB_IPv6));
+            *addr_len = sizeof(STUB_IPv6);
             break;
         }
 
