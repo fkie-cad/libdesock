@@ -124,6 +124,9 @@ VERSION(epoll_wait)
 
 VISIBLE
 int epoll_pwait2 (int epfd, struct epoll_event* events, int maxevents, const struct timespec* timeout, const sigset_t * sigmask) {
+    (void) timeout;
+    (void) sigmask;
+    
     DEBUG_LOG("epoll_pwait2(%d, %p, %d, %p, %p)", epfd, events, maxevents, timeout, sigmask);
 
     int ret = do_wait(epfd, events, maxevents);

@@ -45,6 +45,7 @@ ssize_t postprocess_input (char* buf, ssize_t size) {
 #ifndef MULTI_REQUEST
     (void) buf;
 #else
+    /* Check if we read an incomplete delimiter */
     if (size < (ssize_t) DELIMITER_LEN) {
         for (ssize_t i = 0; i < size; ++i) {
             if (!__builtin_memcmp(&buf[i], REQUEST_DELIMITER, size - i) && is_partial_delimiter(&buf[i], size - i)) {

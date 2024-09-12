@@ -27,6 +27,7 @@ ssize_t hook_output (const char* buf, size_t size) {
 #ifdef DEBUG
     return syscall_cp(SYS_write, 1, buf, size);
 #else
+    (void) buf;
     return (ssize_t) size;
 #endif
 }
