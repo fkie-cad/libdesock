@@ -29,6 +29,9 @@ AFL_PRELOAD=libdesock.so
 ```
 when using AFL++.
 
+Here is an example how to desock nginx:   
+![](./demo.svg)
+
 ## How to build
 Libdesock uses `meson` as its build system.
 
