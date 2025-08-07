@@ -6,7 +6,6 @@
 #ifdef SHARED
 VISIBLE const char __libdesock_interpreter[] __attribute__ ((section (".interp"))) = INTERPRETER;
 
-VISIBLE
 __attribute__((noreturn))
 int __libdesock_main (void) {
     printf(
