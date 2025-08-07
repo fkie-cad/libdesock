@@ -78,8 +78,9 @@ If you are using libdesock and AFL++ for fuzzing, the programs under test
 usually require a special setup to work with AFL++. Check out our [examples](./examples) 
 directory for some examples on how to setup network applications for fuzzing.
 
-Additionally, you can also read up on how libdesock got used by other researchers to fuzz...
+Additionally, you can also read up on how libdesock was used to fuzz...
 - [µC/OS by Cisco Talos](https://blog.talosintelligence.com/fuzzing-uc-os-protocol-stacks/)
+- [Exim by us](https://github.com/pd-fkie/exim-fuzzer)
 
 ## Known bugs
 - TCP servers using [libuv](https://libuv.org/) cannot be desocketed (yet). Desocketing of libuv currently only works with UDP servers. It only takes a small change to fix this though, if you need this, create an issue.
