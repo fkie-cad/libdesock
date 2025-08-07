@@ -1,2 +1,2 @@
 #pragma once
-int _libdesock_fd_table_size (void);
+int __libdesock_fd_table_size (void);

@@ -61,9 +61,9 @@ int test_out_of_fds (void) {
     struct sockaddr_in6 in;
     socklen_t in_size = sizeof(in);
     
-    while (dup(0) < _libdesock_fd_table_size());
+    while (dup(0) < __libdesock_fd_table_size());
 
-    int target_fd = _libdesock_fd_table_size() - 1;
+    int target_fd = __libdesock_fd_table_size() - 1;
     close(target_fd);
     
     int s = socket(AF_INET6, SOCK_STREAM, 0);
